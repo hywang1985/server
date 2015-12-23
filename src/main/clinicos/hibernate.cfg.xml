@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration SYSTEM 
+"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+        <property name="dialect">org.hibernate.dialect.MySQLDialect</property> 
+        <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="connection.url">jdbc:mysql://localhost:3306/clinicos</property>
+        <property name="connection.username">Admin</property>
+        <property name="connection.password">passwd</property>
+        <property name="show_sql">true</property>
+        <property name="hibernate.search.default.directory_provider">
+            org.hibernate.search.store.impl.FSDirectoryProvider</property>
+        <property name="hibernate.search.default.indexBase">C:/softwares/netbeansprojects</property>
+        <mapping class="app.ws.clinicos.model.Patient"/>
+        <mapping class="app.ws.clinicos.model.IPDDetails"/>
+        <mapping class="app.ws.clinicos.model.User"/>
+        <mapping class="app.ws.clinicos.model.Role"/>
+        <mapping class="app.ws.clinicos.model.Permission"/>
+        <mapping class="app.ws.clinicos.model.Doctor"/>
+        <mapping class="app.ws.clinicos.model.Appointment"/>
+    </session-factory>
+</hibernate-configuration>
