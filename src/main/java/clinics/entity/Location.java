@@ -31,7 +31,7 @@ public class Location extends BaseEntity<Integer> implements Serializable {
 
 	private String name;
 
-	private List<Item> items;
+	private List<Patient> items;
 
 	public String getName() {
 		return name;
@@ -54,11 +54,11 @@ public class Location extends BaseEntity<Integer> implements Serializable {
 	}
 
 	@OneToMany(mappedBy = "location", fetch = FetchType.LAZY)
-	public List<Item> getItems() {
+	public List<Patient> getItems() {
 		return items;
 	}
 
-	public void setItems(List<Item> items) {
+	public void setItems(List<Patient> items) {
 		this.items = items;
 	}
 

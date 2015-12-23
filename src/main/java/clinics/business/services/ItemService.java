@@ -20,7 +20,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import clinics.entity.Category;
-import clinics.entity.Item;
+import clinics.entity.Patient;
 import clinics.entity.Item_;
 import clinics.entity.StockType;
 import clinics.entity.Supplier;
@@ -28,12 +28,13 @@ import clinics.jpa.services.ItemsRepositoryService;
 import clinics.jpa.services.SupplierRepositoryService;
 import clinics.model.ConfigurationModel;
 import clinics.model.ItemModel;
+import clinics.model.PersonModel;
 import clinics.model.ReportRequestModel;
 import clinics.model.SupplierStatsModel;
 import clinics.transformer.ItemTransformer;
 
 @Service
-public class ItemService extends AbstractServiceImpl<Integer, ItemModel, Item, ItemsRepositoryService, ItemTransformer> {
+public class ItemService extends AbstractServiceImpl<Integer, PersonModel, Patient, ItemsRepositoryService, ItemTransformer> {
 
 	private static final String SILVER = "Silver";
 
@@ -65,7 +66,7 @@ public class ItemService extends AbstractServiceImpl<Integer, ItemModel, Item, I
 		return itemTransformer;
 	}
 
-	public PageImpl<Item> getAll(Integer page, Integer size) {
+	public PageImpl<Patient> getAll(Integer page, Integer size) {
 		if (page == null || page < 0) {
 			page = 0;
 		}
@@ -116,10 +117,10 @@ public class ItemService extends AbstractServiceImpl<Integer, ItemModel, Item, I
 	}
 
 	public List<ItemModel> generateReport(final ReportRequestModel model) {
-		return transformer().transformTo(itemsRepositoryService.findAll(new Specification<Item>() {
+		return transformer().transformTo(itemsRepositoryService.findAll(new Specification<Patient>() {
 
 			@Override
-			public Predicate toPredicate(Root<Item> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
+			public Predicate toPredicate(Root<Patient> root, CriteriaQuery<?> query, CriteriaBuilder cb) {
 				List<Predicate> predicates = new ArrayList<>();
 
 				if (StringUtils.isNotBlank(model.getItemName())) {
@@ -210,7 +211,7 @@ public class ItemService extends AbstractServiceImpl<Integer, ItemModel, Item, I
 		return calendar.getTimeInMillis();
 	}
 
-	public PageImpl<Item> search(String name, Integer page, Integer size) {
+	public PageImpl<Patient> search(String name, Integer page, Integer size) {
 		if (page == null || page < 0) {
 			page = 0;
 		}
@@ -278,7 +279,7 @@ public class ItemService extends AbstractServiceImpl<Integer, ItemModel, Item, I
 
 	public List<ItemModel> getLentItems(ReportRequestModel model) {
 		Long start = 0L, end = 0L;
-		List<Item> lentItems = null;
+		List<Patient> lentItems = null;
 		if (null != model.getSellStartDate() && null != model.getSellEndDate()) {
 			start = getBeginTimeStampForDate(model.getSellStartDate());
 			end = getEndTimeStampForDate(model.getSellEndDate());
@@ -291,7 +292,7 @@ public class ItemService extends AbstractServiceImpl<Integer, ItemModel, Item, I
 	
 	public List<ItemModel> getSoldItems(ReportRequestModel model) {
 		Long start = 0L, end = 0L;
-		List<Item> soldItems = null;
+		List<Patient> soldItems = null;
 		if (null != model.getSellStartDate() && null != model.getSellEndDate()) {
 			start = getBeginTimeStampForDate(model.getSellStartDate());
 			end = getEndTimeStampForDate(model.getSellEndDate());
@@ -302,7 +303,7 @@ public class ItemService extends AbstractServiceImpl<Integer, ItemModel, Item, I
 		return transformer().transformTo(soldItems);
 	}
 
-	public PageImpl<Item> getAll(boolean booleanValue, Integer page, Integer size) {
+	public PageImpl<Patient> getAll(boolean booleanValue, Integer page, Integer size) {
 		if (page == null || page < 0) {
 			page = 0;
 		}

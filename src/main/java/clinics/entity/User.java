@@ -40,7 +40,7 @@ public class User extends BaseEntity<Integer> implements Serializable {
 
 	private String fullName;
 	
-	private List<Item> items;
+	private List<Patient> items;
 
 	public String getUsername() {
 		return username;
@@ -86,11 +86,11 @@ public class User extends BaseEntity<Integer> implements Serializable {
 	}
 
 	@OneToMany(mappedBy="user",fetch=FetchType.LAZY)
-	public List<Item> getItems() {
+	public List<Patient> getItems() {
 		return items;
 	}
 
-	public void setItems(List<Item> items) {
+	public void setItems(List<Patient> items) {
 		this.items = items;
 	}
 

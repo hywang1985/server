@@ -3,19 +3,19 @@ package clinics.entity;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@StaticMetamodel(Item.class)
+@StaticMetamodel(Patient.class)
 public class Item_ {
 
-	public static volatile SingularAttribute<Item, Integer> id;
-	public static volatile SingularAttribute<Item, String> name;
-	public static volatile SingularAttribute<Item, String> itemType;
-	public static volatile SingularAttribute<Item, Category> category;
-	public static volatile SingularAttribute<Item, Long> createDate;
-	public static volatile SingularAttribute<Item, Long> updateDate;
-	public static volatile SingularAttribute<Item, Supplier> supplier;
-	public static volatile SingularAttribute<Item, StockType> stockType;
-	public static volatile SingularAttribute<Item, Supplier> lendTo;
-	public static volatile SingularAttribute<Item, Long> lendDate;
-	public static volatile SingularAttribute<Item, Boolean> sold;
+	public static volatile SingularAttribute<Patient, Integer> id;
+	public static volatile SingularAttribute<Patient, String> name;
+	public static volatile SingularAttribute<Patient, String> itemType;
+	public static volatile SingularAttribute<Patient, Category> category;
+	public static volatile SingularAttribute<Patient, Long> createDate;
+	public static volatile SingularAttribute<Patient, Long> updateDate;
+	public static volatile SingularAttribute<Patient, Supplier> supplier;
+	public static volatile SingularAttribute<Patient, StockType> stockType;
+	public static volatile SingularAttribute<Patient, Supplier> lendTo;
+	public static volatile SingularAttribute<Patient, Long> lendDate;
+	public static volatile SingularAttribute<Patient, Boolean> sold;
 
 }

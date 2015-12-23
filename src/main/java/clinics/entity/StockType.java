@@ -37,7 +37,7 @@ public class StockType extends BaseEntity<Integer>implements Serializable {
 
 	private Boolean remove;
 
-	private List<Item> items;
+	private List<Patient> items;
 
 	public String getName() {
 		return name;
@@ -76,11 +76,11 @@ public class StockType extends BaseEntity<Integer>implements Serializable {
 	}
 
 	@OneToMany(mappedBy = "stockType", fetch = FetchType.LAZY)
-	public List<Item> getItems() {
+	public List<Patient> getItems() {
 		return items;
 	}
 
-	public void setItems(List<Item> items) {
+	public void setItems(List<Patient> items) {
 		this.items = items;
 	}
 

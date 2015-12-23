@@ -1,6 +1,6 @@
 package clinics.model;
 
-public class CategoryModel extends Model {
+public class DepartmentModel extends Model {
 
 	/**
      * 

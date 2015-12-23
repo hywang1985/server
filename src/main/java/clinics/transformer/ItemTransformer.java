@@ -6,7 +6,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import clinics.entity.Item;
+import clinics.entity.Patient;
 import clinics.entity.Location;
 import clinics.jpa.services.CategoryRepositoryService;
 import clinics.jpa.services.ItemsRepositoryService;
@@ -17,7 +17,7 @@ import clinics.jpa.services.UserRepositoryService;
 import clinics.model.ItemModel;
 
 @Component
-public class ItemTransformer extends AbstractDTOTransformer<ItemModel, Item> {
+public class ItemTransformer extends AbstractDTOTransformer<ItemModel, Patient> {
 
 	private static final String[] FROM_EXCLUDES = new String[] { "supplier", "stockType", "user", "lendTo", "createDate", "lendDate" };
 	private static final String[] TO_EXCLUDES = new String[] { "supplier", "stockType", "user", "lendTo" };
@@ -41,8 +41,8 @@ public class ItemTransformer extends AbstractDTOTransformer<ItemModel, Item> {
 	private ItemsRepositoryService itemsRepositoryService;
 
 	@Override
-	public Item transformFrom(ItemModel source) {
-		Item dest = null;
+	public Patient transformFrom(ItemModel source) {
+		Patient dest = null;
 		if (source != null) {
 			try {
 				if (source.getId() != null) {
@@ -56,7 +56,7 @@ public class ItemTransformer extends AbstractDTOTransformer<ItemModel, Item> {
 						decideLending(null, dest);
 					}
 				} else {
-					dest = new Item();
+					dest = new Patient();
 					BeanUtils.copyProperties(source, dest, FROM_EXCLUDES);
 					dest.setCreateDate(new Date().getTime());
 
@@ -81,7 +81,7 @@ public class ItemTransformer extends AbstractDTOTransformer<ItemModel, Item> {
 		return dest;
 	}
 
-	private void decideLending(ItemModel source, Item dest) {
+	private void decideLending(ItemModel source, Patient dest) {
 		if (source == null) {
 			dest.setLendDate(0);
 			dest.setLendDescription(null);
@@ -94,7 +94,7 @@ public class ItemTransformer extends AbstractDTOTransformer<ItemModel, Item> {
 	}
 
 	@Override
-	public ItemModel transformTo(Item source) {
+	public ItemModel transformTo(Patient source) {
 		ItemModel dest = null;
 		if (source != null) {
 			try {

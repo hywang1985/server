@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import clinics.business.services.CategoryService;
-import clinics.model.CategoryModel;
+import clinics.model.DepartmentModel;
 
 @RestController
 @RequestMapping(value = "/categories", produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -26,19 +26,19 @@ public class CategoryResourceImpl {
 
 	@RequestMapping(method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
-	public CategoryModel save(@RequestBody CategoryModel model) {
+	public DepartmentModel save(@RequestBody DepartmentModel model) {
 		return categoryService.save(model);
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}")
 	@ResponseBody
-	public CategoryModel getById(@PathVariable("id") int id) {
+	public DepartmentModel getById(@PathVariable("id") int id) {
 		return categoryService.getById(id);
 	}
 
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{id}")
 	public ResponseEntity<String> removeById(@PathVariable("id") int id) throws Exception {
-		CategoryModel category = categoryService.getById(id);
+		DepartmentModel category = categoryService.getById(id);
 		HttpHeaders headers = new HttpHeaders();
 		if (null == category) {
 			headers.add("errorMessage", "Category with ID " + id + " Not Found");
@@ -57,7 +57,7 @@ public class CategoryResourceImpl {
 
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
-	public List<CategoryModel> getAll() {
+	public List<DepartmentModel> getAll() {
 		return categoryService.getAll();
 	}
 }

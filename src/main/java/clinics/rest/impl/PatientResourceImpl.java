@@ -23,14 +23,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import clinics.business.services.ItemService;
 import clinics.business.services.SupplierService;
-import clinics.entity.Item;
+import clinics.entity.Patient;
 import clinics.model.ItemModel;
 import clinics.model.SupplierModel;
 import clinics.security.YuownTokenAuthenticationService;
 
 @RestController
-@RequestMapping(value = "/items", produces = { MediaType.APPLICATION_JSON_VALUE })
-public class ItemResourceImpl {
+@RequestMapping(value = "/patients", produces = { MediaType.APPLICATION_JSON_VALUE })
+public class PatientResourceImpl {
 
 	@Autowired
 	private ItemService itemService;
@@ -206,7 +206,7 @@ public class ItemResourceImpl {
 	@ResponseBody
 	public ResponseEntity<List<ItemModel>> getAll(@RequestParam(value = "name", required = false) String name, @RequestParam(value = "page", required = false) Integer page, @RequestParam(value = "size", required = false) Integer size, @RequestParam(value = "valid", required = false) Boolean valid) {
 		HttpHeaders headers = new HttpHeaders();
-		PageImpl<Item> pagedItems = null;
+		PageImpl<Patient> pagedItems = null;
 		List<ItemModel> items = null;
 		if(valid == null) {
 			if(StringUtils.isNotBlank(name)) {

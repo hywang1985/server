@@ -5,11 +5,11 @@ import org.springframework.stereotype.Service;
 
 import clinics.entity.Category;
 import clinics.jpa.services.CategoryRepositoryService;
-import clinics.model.CategoryModel;
+import clinics.model.DepartmentModel;
 import clinics.transformer.CategoryTransformer;
 
 @Service
-public class CategoryService extends AbstractServiceImpl<Integer, CategoryModel, Category, CategoryRepositoryService, CategoryTransformer> {
+public class CategoryService extends AbstractServiceImpl<Integer, DepartmentModel, Category, CategoryRepositoryService, CategoryTransformer> {
 
 	@Autowired
 	private CategoryRepositoryService categoryRepositoryService;

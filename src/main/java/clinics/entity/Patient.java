@@ -19,10 +19,13 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 @Entity
-@Table(name = "ITEMS", uniqueConstraints = @UniqueConstraint(columnNames = { "id" }))
+@Table(name = "PATIENTS", uniqueConstraints = @UniqueConstraint(columnNames = { "id" }))
 @AttributeOverrides(value = {
         @AttributeOverride(name = "id", column = @Column(name = "id", insertable = false, updatable = false)),
-        @AttributeOverride(name = "name", column = @Column(name = "name")),
+        @AttributeOverride(name = "firstName", column = @Column(name = "firstName")),
+        @AttributeOverride(name = "lastName", column = @Column(name = "lastName")),
+        @AttributeOverride(name = "mobile", column = @Column(name = "mobile")),
+        @AttributeOverride(name = "address", column = @Column(name = "address")),
         @AttributeOverride(name = "createDate", column = @Column(name = "create_date")),
         @AttributeOverride(name = "updateDate", column = @Column(name = "update_date")),
         @AttributeOverride(name = "itemType", column = @Column(name = "type")),
@@ -38,7 +41,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
         @AttributeOverride(name = "location", column = @Column(name = "location")),
         @AttributeOverride(name = "validated", column = @Column(name = "validated")),
 })
-public class Item extends BaseEntity<Integer> implements Serializable {
+public class Patient extends BaseEntity<Integer> implements Serializable {
 
 	private static final long serialVersionUID = 4289151143888117381L;
 
@@ -234,7 +237,7 @@ public class Item extends BaseEntity<Integer> implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Item rhs = (Item) obj;
+		Patient rhs = (Patient) obj;
 		return (new EqualsBuilder()).append(this.id, rhs.id).isEquals();
 	}
 }

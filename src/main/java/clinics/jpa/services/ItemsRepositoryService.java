@@ -8,12 +8,12 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import clinics.entity.Item;
+import clinics.entity.Patient;
 import clinics.entity.Supplier;
 import clinics.jpa.repository.ItemsRepository;
 
 @Service("itemsRepositoryService")
-public class ItemsRepositoryService extends AbstractRepositoryService<ItemsRepository, Item, Integer> {
+public class ItemsRepositoryService extends AbstractRepositoryService<ItemsRepository, Patient, Integer> {
 	
 	public static final String PERCENT = "%";
 
@@ -31,17 +31,17 @@ public class ItemsRepositoryService extends AbstractRepositoryService<ItemsRepos
 	}
 
 	@Override
-	public List<Item> findAll() {
+	public List<Patient> findAll() {
 		return super.findAll();
 	}
 
 	@Override
-	public Item findOne(Integer id) {
+	public Patient findOne(Integer id) {
 		return super.findOne(id);
 	}
 
 	@Override
-	public Item save(Item entity) {
+	public Patient save(Patient entity) {
 		return super.save(entity);
 	}
 
@@ -53,7 +53,7 @@ public class ItemsRepositoryService extends AbstractRepositoryService<ItemsRepos
 		return repository().findAllItemNames();
 	}
 	
-	public PageImpl<Item> findAllByNameLike(String name, Pageable pageRequest) {
+	public PageImpl<Patient> findAllByNameLike(String name, Pageable pageRequest) {
 		return repository().findAllByNameLike(PERCENT + name + PERCENT, pageRequest);
 	}
 	
@@ -65,23 +65,23 @@ public class ItemsRepositoryService extends AbstractRepositoryService<ItemsRepos
 		return repository().findItemsCount(false, itemNotifyCount);
 	}
 
-	public List<Item> getLentItems() {
+	public List<Patient> getLentItems() {
 		return repository().findAllByLendToNotNullAndSoldOrderByLendToDesc(false);
 	}
 	
-	public List<Item> getSoldItems() {
+	public List<Patient> getSoldItems() {
 		return repository().findAllByLendToNotNullAndSoldOrderByLendToDesc(true);
 	}
 
-	public List<Item> getSoldItems(Long start, Long end) {
+	public List<Patient> getSoldItems(Long start, Long end) {
 		return repository().findAllByLendToNotNullAndLendDateBetweenAndSoldOrderByLendToDesc(start, end, true);
 	}
 
-	public List<Item> getLentItems(Long start, Long end) {
+	public List<Patient> getLentItems(Long start, Long end) {
 		return repository().findAllByLendToNotNullAndLendDateBetweenAndSoldOrderByLendToDesc(start, end, false);
 	}
 
-	public PageImpl<Item> findAllByValidated(boolean booleanValue, Pageable pageRequest) {
+	public PageImpl<Patient> findAllByValidated(boolean booleanValue, Pageable pageRequest) {
 		return repository().findAllByValidated(booleanValue, pageRequest);
 	}
 
