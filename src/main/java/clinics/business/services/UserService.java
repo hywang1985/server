@@ -26,7 +26,7 @@ public class UserService extends AbstractServiceImpl<Integer, UserModel, User, U
 	@Value("#{'${SUPER_GROUPS}'.split(',')}")
 	private List<String> SUPER_GROUPS;
 
-	@Value("#{'${yuventory.valid.roles}'.split(',')}")
+	@Value("#{'${clinics.valid.roles}'.split(',')}")
 	private List<String> ALL_ROLES;
 
 	@Autowired

@@ -1,4 +1,4 @@
-CREATE DATABASE `yuventory`;
+CREATE DATABASE `clinics`;
 
 CREATE TABLE `categories` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -104,19 +104,16 @@ CREATE TABLE `group_members` (
   CONSTRAINT `group_members_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`)
 );
 
-INSERT INTO `yuventory`.`groups` (`id`, `group_name`) VALUES (1, 'USERS');
-INSERT INTO `yuventory`.`groups` (`id`, `group_name`) VALUES (2, 'ADMINS');
+INSERT INTO `clinics`.`groups` (`id`, `group_name`) VALUES (1, 'USERS');
+INSERT INTO `clinics`.`groups` (`id`, `group_name`) VALUES (2, 'ADMINS');
 
-INSERT INTO `yuventory`.`group_members` (`id`, `username`, `group_id`) VALUES (1, 'user1', 1);
+INSERT INTO `clinics`.`group_members` (`id`, `username`, `group_id`) VALUES (1, 'user1', 1);
 
-INSERT INTO `yuventory`.`group_authorities` (`group_id`, `authority`) VALUES (1,"ROLE_SETTINGS");
-INSERT INTO `yuventory`.`group_authorities` (`group_id`, `authority`) VALUES (1,"ROLE_PRINT");
-INSERT INTO `yuventory`.`group_authorities` (`group_id`, `authority`) VALUES (1,"ROLE_DATAENTRY");
-INSERT INTO `yuventory`.`group_authorities` (`group_id`, `authority`) VALUES (1,"ROLE_REFERENCE_ENTRY");
-INSERT INTO `yuventory`.`group_authorities` (`group_id`, `authority`) VALUES (1,"ROLE_VIEW_ITEMS");
-INSERT INTO `yuventory`.`group_authorities` (`group_id`, `authority`) VALUES (1,"ROLE_LENDER");
-INSERT INTO `yuventory`.`group_authorities` (`group_id`, `authority`) VALUES (1,"ROLE_ITEM_RETURNER");
-INSERT INTO `yuventory`.`group_authorities` (`group_id`, `authority`) VALUES (1,"ROLE_SELLER");
-INSERT INTO `yuventory`.`group_authorities` (`group_id`, `authority`) VALUES (1,"ROLE_REPORTS");
-INSERT INTO `yuventory`.`group_authorities` (`group_id`, `authority`) VALUES (1,"ROLE_USER_MANAGER");
+INSERT INTO `clinics`.`group_authorities` (`group_id`, `authority`) VALUES (1,"ROLE_REFERENCE_ENTRY");
+INSERT INTO `clinics`.`group_authorities` (`group_id`, `authority`) VALUES (1,"ROLE_SETTINGS");
+INSERT INTO `clinics`.`group_authorities` (`group_id`, `authority`) VALUES (1,"ROLE_PRINT");
+INSERT INTO `clinics`.`group_authorities` (`group_id`, `authority`) VALUES (1,"ROLE_VIEW_PATIENTS");
+INSERT INTO `clinics`.`group_authorities` (`group_id`, `authority`) VALUES (1,"ROLE_EDIT_PATIENTS");
+INSERT INTO `clinics`.`group_authorities` (`group_id`, `authority`) VALUES (1,"ROLE_REPORTS");
+INSERT INTO `clinics`.`group_authorities` (`group_id`, `authority`) VALUES (1,"ROLE_USER_MANAGER");
 
