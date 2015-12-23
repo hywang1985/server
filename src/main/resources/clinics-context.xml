@@ -14,15 +14,15 @@
 
 	<context:annotation-config />
 	<context:component-scan base-package="clinics" use-default-filters="true" />
-	<context:property-placeholder location="classpath:/yuventory.properties" />
+	<context:property-placeholder location="classpath:/clinics.properties" />
 
     <mvc:annotation-driven />
 
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="url" value="${yuventory.db.url}" />
-		<property name="username" value="${yuventory.db.username}" />
-		<property name="password" value="${yuventory.db.password}" />
-		<property name="driverClassName" value="${yuventory.db.driverClass}" />
+		<property name="url" value="${clinics.db.url}" />
+		<property name="username" value="${clinics.db.username}" />
+		<property name="password" value="${clinics.db.password}" />
+		<property name="driverClassName" value="${clinics.db.driverClass}" />
 	</bean>
 	<bean id="jpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
 		<property name="showSql" value="true" />
