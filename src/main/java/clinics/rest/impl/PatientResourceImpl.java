@@ -80,7 +80,11 @@ public class PatientResourceImpl {
 		HttpHeaders headers = new HttpHeaders();
 		Page<Patient> pagedItems = null;
 		List<PatientModel> items = null;
-		pagedItems = patientService.getAll(page, size);
+		if (StringUtils.isNotBlank(name)) {
+			pagedItems = patientService.search(name, page, size);
+		} else {
+			pagedItems = patientService.getAll(page, size);
+		}
 		items = patientService.transformer().transformTo(pagedItems.getContent());
 
 		headers.add("pages", pagedItems.getTotalPages() + StringUtils.EMPTY);

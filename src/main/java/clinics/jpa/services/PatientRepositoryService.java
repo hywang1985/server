@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import clinics.entity.Patient;
@@ -45,5 +46,9 @@ public class PatientRepositoryService extends AbstractRepositoryService<Patients
 
 	public Page<Patient> findAll(PageRequest pageRequest) {
 		return repository().findAll(pageRequest);
+	}
+
+	public Page<Patient> findAllByNameLike(String name, Pageable pageRequest) {
+		return repository().findAllByFirstNameLikeOrLastNameLike(PERCENT + name + PERCENT, PERCENT + name + PERCENT, pageRequest);
 	}
 }

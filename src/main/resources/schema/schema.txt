@@ -92,7 +92,7 @@ CREATE TABLE `group_authorities` (
   PRIMARY KEY (`id`),
   KEY `group_id` (`group_id`),
   CONSTRAINT `group_authorities_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1;
+);
 
 
 CREATE TABLE `group_members` (
