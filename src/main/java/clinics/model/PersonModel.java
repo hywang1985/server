@@ -27,7 +27,7 @@ public class PersonModel extends Model {
 	private Gender sex;
 	
 	private Prefix prefix;
-
+	
 	public String getFirstName() {
 		return firstName;
 	}

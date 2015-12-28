@@ -2,7 +2,7 @@ package clinics.model;
 
 import java.util.Date;
 
-public class IPDDetails extends Model {
+public class VisitModel extends Model {
 
 	/**
 	 * 
@@ -17,7 +17,7 @@ public class IPDDetails extends Model {
 
 	private int referredBy;
 
-	private String admitReason;
+	private String reason;
 
 	public String getRoomNumber() {
 		return roomNumber;
@@ -51,11 +51,11 @@ public class IPDDetails extends Model {
 		this.referredBy = referredBy;
 	}
 
-	public String getAdmitReason() {
-		return admitReason;
+	public String getReason() {
+		return reason;
 	}
 
-	public void setAdmitReason(String admitReason) {
-		this.admitReason = admitReason;
+	public void setReason(String reason) {
+		this.reason = reason;
 	}
 }

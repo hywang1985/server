@@ -10,7 +10,7 @@ public class ConfigurationModel extends Model {
 	private String name;
 
 	private Integer value;
-	
+
 	private String strValue;
 
 	public String getName() {

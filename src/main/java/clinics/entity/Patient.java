@@ -1,6 +1,7 @@
 package clinics.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
@@ -9,14 +10,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+
+import clinics.enums.Gender;
+import clinics.enums.Prefix;
 
 @Entity
 @Table(name = "PATIENTS", uniqueConstraints = @UniqueConstraint(columnNames = { "id" }))
@@ -26,197 +28,137 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
         @AttributeOverride(name = "lastName", column = @Column(name = "lastName")),
         @AttributeOverride(name = "mobile", column = @Column(name = "mobile")),
         @AttributeOverride(name = "address", column = @Column(name = "address")),
-        @AttributeOverride(name = "createDate", column = @Column(name = "create_date")),
-        @AttributeOverride(name = "updateDate", column = @Column(name = "update_date")),
-        @AttributeOverride(name = "itemType", column = @Column(name = "type")),
-        @AttributeOverride(name = "weight", column = @Column(name = "weight")),
-        @AttributeOverride(name = "category", column = @Column(name = "category")),
-        @AttributeOverride(name = "supplier", column = @Column(name = "supplier")),
-        @AttributeOverride(name = "stockType", column = @Column(name = "stock_type")),
-        @AttributeOverride(name = "user", column = @Column(name = "user_entered")),
-        @AttributeOverride(name = "lendTo", column = @Column(name = "lend_to")),
-        @AttributeOverride(name = "lendDate", column = @Column(name = "lend_date")),
-        @AttributeOverride(name = "lendDescription", column = @Column(name = "lend_description")),
-        @AttributeOverride(name = "sold", column = @Column(name = "sold")),
-        @AttributeOverride(name = "location", column = @Column(name = "location")),
-        @AttributeOverride(name = "validated", column = @Column(name = "validated")),
+        @AttributeOverride(name = "dob", column = @Column(name = "dob")),
+        @AttributeOverride(name = "age", column = @Column(name = "age")),
+        @AttributeOverride(name = "gender", column = @Column(name = "gender")),
+        @AttributeOverride(name = "prefix", column = @Column(name = "prefix")),
+        @AttributeOverride(name = "createdDate", column = @Column(name = "create_date")),
+        @AttributeOverride(name = "modifiedDate", column = @Column(name = "update_date")),
+        @AttributeOverride(name = "createdBy", column = @Column(name = "user_entered")),
+        @AttributeOverride(name = "modifiedBy", column = @Column(name = "user_updated"))
 })
 public class Patient extends BaseEntity<Integer> implements Serializable {
 
 	private static final long serialVersionUID = 4289151143888117381L;
 
-	private String name;
+	private String firstName;
 
-	private String itemType;
+	private String lastName;
 
-	private double weight;
+	private String mobile;
 
-	private Category category;
+	private String address;
 
-	private long createDate;
+	private Date dob;
 
-	private long updateDate;
+	private byte age;
 
-	private Supplier supplier;
-
-	private StockType stockType;
-
-	private User user;
-
-	private Supplier lendTo;
-
-	private long lendDate;
-
-	private String lendDescription;
-
-	private Boolean sold;
+	private Gender sex;
 	
-	private Location location;
+	private Prefix prefix;
 	
-	private Boolean validated;
+	private Date createdDate;
 
-	public String getName() {
-		return name;
+	private Date modifiedDate;
+
+	private int createdBy;
+
+	private int modifiedBy;
+
+	public String getFirstName() {
+		return firstName;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public String getLastName() {
+		return lastName;
 	}
 
-	public String getItemType() {
-		return itemType;
+	public String getMobile() {
+		return mobile;
 	}
 
-	public void setItemType(String itemType) {
-		this.itemType = itemType;
+	public String getAddress() {
+		return address;
 	}
 
-	public double getWeight() {
-		return weight;
+	public Date getDob() {
+		return dob;
 	}
 
-	public void setWeight(double weight) {
-		this.weight = weight;
+	public byte getAge() {
+		return age;
 	}
 
-	@Override
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	public Integer getId() {
-		return this.id;
+	public Gender getSex() {
+		return sex;
 	}
 
-	@Override
-	public void setId(Integer id) {
-		this.id = id;
+	public Prefix getPrefix() {
+		return prefix;
 	}
 
-	@ManyToOne
-	@JoinColumn(name = "category", nullable = false)
-	public Category getCategory() {
-		return category;
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
 	}
 
-	public void setCategory(Category category) {
-		this.category = category;
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
 	}
 
-	@ManyToOne
-	@JoinColumn(name = "supplier", nullable = false)
-	public Supplier getSupplier() {
-		return supplier;
+	public void setMobile(String mobile) {
+		this.mobile = mobile;
 	}
 
-	public void setSupplier(Supplier supplier) {
-		this.supplier = supplier;
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
-	@ManyToOne
-	@JoinColumn(name = "lend_to", nullable = true)
-	public Supplier getLendTo() {
-		return lendTo;
+	public void setDob(Date dob) {
+		this.dob = dob;
 	}
 
-	public void setLendTo(Supplier lendTo) {
-		this.lendTo = lendTo;
+	public void setAge(byte age) {
+		this.age = age;
 	}
 
-	public long getLendDate() {
-		return lendDate;
+	public void setSex(Gender sex) {
+		this.sex = sex;
 	}
 
-	public void setLendDate(long lendDate) {
-		this.lendDate = lendDate;
+	public void setPrefix(Prefix prefix) {
+		this.prefix = prefix;
 	}
 
-	public String getLendDescription() {
-		return lendDescription;
+	public Date getCreatedDate() {
+		return createdDate;
 	}
 
-	public void setLendDescription(String lendDescription) {
-		this.lendDescription = lendDescription;
+	public Date getModifiedDate() {
+		return modifiedDate;
 	}
 
-	@ManyToOne
-	@JoinColumn(name = "location", nullable = true)
-	public Location getLocation() {
-		return location;
+	public int getCreatedBy() {
+		return createdBy;
 	}
 
-	public void setLocation(Location location) {
-		this.location = location;
+	public int getModifiedBy() {
+		return modifiedBy;
 	}
 
-	public Boolean getSold() {
-		return sold == null ? false : sold;
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
 	}
 
-	public void setSold(Boolean sold) {
-		this.sold = sold == null ? false : sold;
+	public void setModifiedDate(Date modifiedDate) {
+		this.modifiedDate = modifiedDate;
 	}
 
-	public long getCreateDate() {
-		return createDate;
+	public void setCreatedBy(int createdBy) {
+		this.createdBy = createdBy;
 	}
 
-	public long getUpdateDate() {
-		return updateDate;
-	}
-
-	public void setCreateDate(long createDate) {
-		this.createDate = createDate;
-	}
-
-	public void setUpdateDate(long updateDate) {
-		this.updateDate = updateDate;
-	}
-
-	@ManyToOne
-	@JoinColumn(name = "stock_type", nullable = false)
-	public StockType getStockType() {
-		return stockType;
-	}
-
-	public void setStockType(StockType stockType) {
-		this.stockType = stockType;
-	}
-
-	@ManyToOne
-	@JoinColumn(name = "user_entered", nullable = false)
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
-	public Boolean getValidated() {
-		return validated;
-	}
-
-	public void setValidated(Boolean validated) {
-		this.validated = validated;
+	public void setModifiedBy(int modifiedBy) {
+		this.modifiedBy = modifiedBy;
 	}
 
 	@Override
@@ -239,5 +181,17 @@ public class Patient extends BaseEntity<Integer> implements Serializable {
 			return false;
 		Patient rhs = (Patient) obj;
 		return (new EqualsBuilder()).append(this.id, rhs.id).isEquals();
+	}
+
+	@Override
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	public Integer getId() {
+		return id;
+	}
+
+	@Override
+	public void setId(Integer id) {
+		this.id = id;
 	}
 }
