@@ -3,6 +3,8 @@ package clinics.jpa.services;
 import java.io.Serializable;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +29,10 @@ public abstract class AbstractRepositoryService<R extends BaseRepository<E, ID>,
 	public List<E> findAll() {
 		return repository().findAll();
 	};
+	
+	public Page<E> findAll(PageRequest pageRequest) {
+		return repository().findAll(pageRequest);
+	}
 
 	public List<E> findAll(Specification<E> specification) {
 		return repository().findAll(specification);

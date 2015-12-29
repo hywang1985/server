@@ -3,6 +3,8 @@ package clinics.business.services;
 import java.io.Serializable;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 import clinics.entity.BaseEntity;
@@ -28,6 +30,16 @@ public abstract class AbstractServiceImpl<ID extends Serializable, DTO extends M
 
 	public List<DTO> getAll() {
 		return transformer().transformTo(repoService().findAll());
+	}
+
+	public Page<E> getAllByPageNumber(Integer page, Integer size, Integer fromSystem) {
+		if (page == null || page < 0) {
+			page = 0;
+		}
+		if (size == null || (size < 0 || size > fromSystem)) {
+			size = fromSystem;
+		}
+		return repoService().findAll(new PageRequest(page, size));
 	}
 
 	protected abstract RS repoService();

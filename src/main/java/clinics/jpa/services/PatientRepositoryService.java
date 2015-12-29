@@ -44,10 +44,6 @@ public class PatientRepositoryService extends AbstractRepositoryService<Patients
 		return super.save(entity);
 	}
 
-	public Page<Patient> findAll(PageRequest pageRequest) {
-		return repository().findAll(pageRequest);
-	}
-
 	public Page<Patient> findAllByNameLike(String name, Pageable pageRequest) {
 		return repository().findAllByFirstNameLikeOrLastNameLike(PERCENT + name + PERCENT, PERCENT + name + PERCENT, pageRequest);
 	}

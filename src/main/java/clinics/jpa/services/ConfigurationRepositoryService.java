@@ -43,7 +43,7 @@ public class ConfigurationRepositoryService extends AbstractRepositoryService<Co
 		return repository().findByName(name);
 	}
 	
-	public List<Configuration> findStartupItems() {
+	public List<Configuration> findCacheableItems() {
 		return repository().findByAutoLoad(true);
 	}
 }
