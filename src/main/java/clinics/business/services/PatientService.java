@@ -17,7 +17,7 @@ import clinics.transformer.PatientTransformer;
 @Service
 public class PatientService extends AbstractServiceImpl<Integer, PatientModel, Patient, PatientRepositoryService, PatientTransformer> {
 
-	private static final String ITEM_PAGE_SIZE = "item_pagesize";
+	private static final String PAGE_SIZE = "pagesize";
 
 	private static final String ITEM_NOTIFY_COUNT = "item_notify_count";
 
@@ -44,7 +44,7 @@ public class PatientService extends AbstractServiceImpl<Integer, PatientModel, P
 		if (page == null || page < 0) {
 			page = 0;
 		}
-		Integer fromSystem = Integer.parseInt(System.getProperty(ITEM_PAGE_SIZE));
+		Integer fromSystem = Integer.parseInt(System.getProperty(PAGE_SIZE));
 		if (size == null || (size < 0 || size > fromSystem)) {
 			size = fromSystem;
 		}
@@ -55,7 +55,7 @@ public class PatientService extends AbstractServiceImpl<Integer, PatientModel, P
 		if (page == null || page < 0) {
 			page = 0;
 		}
-		Integer fromSystem = Integer.parseInt(System.getProperty(ITEM_PAGE_SIZE));
+		Integer fromSystem = Integer.parseInt(System.getProperty(PAGE_SIZE));
 		if (size == null || (size < 0 || size > fromSystem)) {
 			size = fromSystem;
 		}
@@ -63,7 +63,7 @@ public class PatientService extends AbstractServiceImpl<Integer, PatientModel, P
 	}
 
 	public Integer getPageSize() {
-		ConfigurationModel pageSize = configurationService.getByName(ITEM_PAGE_SIZE);
+		ConfigurationModel pageSize = configurationService.getByName(PAGE_SIZE);
 		Integer size = 10;
 		if (pageSize != null) {
 			size = pageSize.getValue();
@@ -72,10 +72,10 @@ public class PatientService extends AbstractServiceImpl<Integer, PatientModel, P
 	}
 
 	public void setPageSize(Integer size) {
-		ConfigurationModel pageSize = configurationService.getByName(ITEM_PAGE_SIZE);
+		ConfigurationModel pageSize = configurationService.getByName(PAGE_SIZE);
 		if (pageSize == null) {
 			pageSize = new ConfigurationModel();
-			pageSize.setName(ITEM_PAGE_SIZE);
+			pageSize.setName(PAGE_SIZE);
 		}
 		if (size == null || size <= 0) {
 			size = 10;
