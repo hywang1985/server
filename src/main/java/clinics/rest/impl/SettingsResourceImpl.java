@@ -1,10 +1,17 @@
 package clinics.rest.impl;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.Context;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -104,6 +111,15 @@ public class SettingsResourceImpl {
 			e.printStackTrace();
 		}
 	}
+	
+	@RequestMapping(value = "/configs", method = RequestMethod.GET)
+	@ResponseBody
+	public ResponseEntity<List<ConfigurationModel>> getAll() {
+		HttpHeaders headers = new HttpHeaders();
+		List<ConfigurationModel> all = configurationService.getAll();
+
+		return new ResponseEntity<List<ConfigurationModel>>(all, headers, HttpStatus.OK);
+	}
 
 	public Double getConfigValue(String configName) {
 		ConfigurationModel configItem = configurationService.getByName(configName);
@@ -112,6 +128,18 @@ public class SettingsResourceImpl {
 			value = Double.parseDouble(configItem.getStrValue());
 		}
 		return value;
+	}
+
+	@RequestMapping(value = "/configs", method = RequestMethod.POST, consumes = { MediaType.APPLICATION_JSON_VALUE })
+	@ResponseBody
+	public ResponseEntity<ConfigurationModel> save(@RequestBody ConfigurationModel model, @Context HttpServletRequest httpRequest) {
+		HttpHeaders headers = new HttpHeaders();
+		HttpStatus responseStatus = HttpStatus.BAD_REQUEST;
+
+		model = configurationService.save(model);
+		responseStatus = HttpStatus.OK;
+
+		return new ResponseEntity<ConfigurationModel>(model, headers, responseStatus);
 	}
 
 	public void saveConfigValue(String configName, Double value) {
