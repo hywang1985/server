@@ -42,4 +42,8 @@ public class ConfigurationRepositoryService extends AbstractRepositoryService<Co
 	public Configuration findByName(String name) {
 		return repository().findByName(name);
 	}
+	
+	public List<Configuration> findStartupItems() {
+		return repository().findByAutoLoad(true);
+	}
 }

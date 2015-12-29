@@ -22,7 +22,8 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
     @AttributeOverride(name = "id", column = @Column(name = "ID", insertable = false, updatable = false)),
     @AttributeOverride(name = "name", column = @Column(name = "name")),
     @AttributeOverride(name = "value", column = @Column(name = "value")),
-    @AttributeOverride(name = "strValue", column = @Column(name = "str_value"))
+    @AttributeOverride(name = "strValue", column = @Column(name = "str_value")),
+    @AttributeOverride(name = "autoLoad", column = @Column(name = "load_on_startup"))
 })
 public class Configuration extends BaseEntity<Integer> implements Serializable {
 
@@ -30,9 +31,13 @@ public class Configuration extends BaseEntity<Integer> implements Serializable {
 
     private String name;
     
+    private String description;
+    
     private Integer value;
     
     private String strValue;
+    
+    private Boolean autoLoad;
     
     public String getName() {
         return name;
@@ -41,6 +46,14 @@ public class Configuration extends BaseEntity<Integer> implements Serializable {
     public void setName(String name) {
         this.name = name;
     }
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
 
 	public Integer getValue() {
 		return value;
@@ -70,7 +83,15 @@ public class Configuration extends BaseEntity<Integer> implements Serializable {
         this.id = id;
     }
 
-    @Override
+    public Boolean getAutoLoad() {
+		return autoLoad;
+	}
+
+	public void setAutoLoad(Boolean autoLoad) {
+		this.autoLoad = autoLoad;
+	}
+
+	@Override
     public int hashCode() {
         return (new HashCodeBuilder()).append(this.id).toHashCode();
     }

@@ -12,8 +12,8 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.jpa.domain.Specification;
@@ -27,16 +27,14 @@ import clinics.transformer.ConfigurationTransformer;
 
 @Service
 @Scope(BeanDefinition.SCOPE_SINGLETON)
-public class ConfigurationService extends AbstractServiceImpl<Integer, ConfigurationModel, Configuration, ConfigurationRepositoryService, ConfigurationTransformer> {
+public class ConfigurationService extends
+		AbstractServiceImpl<Integer, ConfigurationModel, Configuration, ConfigurationRepositoryService, ConfigurationTransformer> {
 
 	@Autowired
 	private ConfigurationRepositoryService configurationRepositoryService;
 
 	@Autowired
 	private ConfigurationTransformer configurationTransformer;
-
-	@Value("#{'${settings.to.init}'.split(',')}")
-	private List<String> settingsToInit;
 
 	@Override
 	protected ConfigurationRepositoryService repoService() {
@@ -107,14 +105,17 @@ public class ConfigurationService extends AbstractServiceImpl<Integer, Configura
 		int value = 0;
 		if (valueModel != null) {
 			value = valueModel.getValue();
+			System.setProperty(name, Integer.toString(value));
+
+			if (StringUtils.isNotBlank(valueModel.getStrValue())) {
+				System.setProperty(name, valueModel.getStrValue());
+			}
 		}
-		System.setProperty(name, Integer.toString(value));
 	}
 
 	public void saveSettingsToSystem() {
-		String[] names = settingsToInit.toArray(new String[0]);
-		List<ConfigurationModel> settingsFromDB = getSettings(names);
-		for (ConfigurationModel configurationModel : settingsFromDB) {
+		List<ConfigurationModel> startupItems = transformer().transformTo(repoService().findStartupItems());
+		for (ConfigurationModel configurationModel : startupItems) {
 			saveSettingsToSystem(configurationModel.getName(), configurationModel);
 		}
 	}
