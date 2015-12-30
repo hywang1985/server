@@ -1,6 +1,6 @@
 package clinics.model;
 
-import java.util.Date;
+import clinics.enums.VisitType;
 
 public class VisitModel extends Model {
 
@@ -8,46 +8,126 @@ public class VisitModel extends Model {
 	 * 
 	 */
 	private static final long serialVersionUID = 5362208769594760467L;
+	
+	private Integer patientId;
 
-	private String roomNumber;
+	private Double weight;
 
-	private Date admitDate;
+	private Double height;
 
-	private Date dischargeDate;
+	private Integer respiRate;
 
-	private int referredBy;
+	private Integer sBp;
+
+	private Integer dBp;
+
+	private Integer bodyTemp;
+
+	private VisitType type;
+
+	private Integer room;
+
+	private String visitDate;
+
+	private String dischargeDate;
+
+	private Integer referredBy;
 
 	private String reason;
 
-	public String getRoomNumber() {
-		return roomNumber;
+	public Integer getPatientId() {
+		return patientId;
 	}
 
-	public void setRoomNumber(String roomNumber) {
-		this.roomNumber = roomNumber;
+	public void setPatientId(Integer patientId) {
+		this.patientId = patientId;
 	}
 
-	public Date getAdmitDate() {
-		return admitDate;
+	public Double getWeight() {
+		return weight;
 	}
 
-	public void setAdmitDate(Date admitDate) {
-		this.admitDate = admitDate;
+	public void setWeight(Double weight) {
+		this.weight = weight;
 	}
 
-	public Date getDischargeDate() {
+	public Double getHeight() {
+		return height;
+	}
+
+	public void setHeight(Double height) {
+		this.height = height;
+	}
+
+	public Integer getRespiRate() {
+		return respiRate;
+	}
+
+	public void setRespiRate(Integer respiRate) {
+		this.respiRate = respiRate;
+	}
+
+	public Integer getsBp() {
+		return sBp;
+	}
+
+	public void setsBp(Integer sBp) {
+		this.sBp = sBp;
+	}
+
+	public Integer getdBp() {
+		return dBp;
+	}
+
+	public void setdBp(Integer dBp) {
+		this.dBp = dBp;
+	}
+
+	public Integer getBodyTemp() {
+		return bodyTemp;
+	}
+
+	public void setBodyTemp(Integer bodyTemp) {
+		this.bodyTemp = bodyTemp;
+	}
+
+	public VisitType getType() {
+		return type;
+	}
+
+	public void setType(VisitType type) {
+		this.type = type;
+	}
+
+	public Integer getRoom() {
+		return room;
+	}
+
+	public void setRoom(Integer room) {
+		this.room = room;
+	}
+
+	public String getVisitDate() {
+		return visitDate;
+	}
+
+	public void setVisitDate(String visitDate) {
+		this.visitDate = visitDate;
+	}
+
+	public String getDischargeDate() {
 		return dischargeDate;
 	}
 
-	public void setDischargeDate(Date dischargeDate) {
+	public void setDischargeDate(String dischargeDate) {
 		this.dischargeDate = dischargeDate;
 	}
 
-	public int getReferredBy() {
+	public Integer getReferredBy() {
 		return referredBy;
 	}
 
-	public void setReferredBy(int referredBy) {
+	public void setReferredBy(Integer referredBy) {
 		this.referredBy = referredBy;
 	}
 

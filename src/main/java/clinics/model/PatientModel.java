@@ -7,33 +7,14 @@ public class PatientModel extends PersonModel {
 	 */
 	private static final long serialVersionUID = 4391452643936417328L;
 
-	private Double weight;
+	private int bloodGroup;
 
-	private Double height;
-
-	private String bloodGroup;
-
-	public Double getWeight() {
-		return weight;
-	}
-
-	public Double getHeight() {
-		return height;
-	}
-
-	public String getBloodGroup() {
+	public int getBloodGroup() {
 		return bloodGroup;
 	}
 
-	public void setWeight(Double weight) {
-		this.weight = weight;
-	}
-
-	public void setHeight(Double height) {
-		this.height = height;
-	}
-
-	public void setBloodGroup(String bloodGroup) {
+	public void setBloodGroup(int bloodGroup) {
 		this.bloodGroup = bloodGroup;
 	}
+
 }

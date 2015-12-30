@@ -22,8 +22,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import clinics.business.services.ConfigurationService;
 import clinics.business.services.PatientService;
+import clinics.business.services.VisitService;
 import clinics.entity.Patient;
 import clinics.model.PatientModel;
+import clinics.model.VisitModel;
 import clinics.security.YuownTokenAuthenticationService;
 import clinics.utils.Constants;
 
@@ -33,6 +35,9 @@ public class PatientResourceImpl {
 
 	@Autowired
 	private PatientService patientService;
+	
+	@Autowired
+	private VisitService visitService;
 
 	@Autowired
 	private ConfigurationService configurationService;
@@ -69,6 +74,7 @@ public class PatientResourceImpl {
 			return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
 		} else {
 			try {
+				visitService.removeByPatientId(item.getId());
 				patientService.removeById(id);
 				return new ResponseEntity<String>(headers, HttpStatus.OK);
 			} catch (Exception e) {
@@ -97,5 +103,35 @@ public class PatientResourceImpl {
 		headers.add("totalItems", pagedItems.getTotalElements() + StringUtils.EMPTY);
 
 		return new ResponseEntity<List<PatientModel>>(items, headers, HttpStatus.OK);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/{id}/visits")
+	public ResponseEntity<List<VisitModel>> getPatientVisits(@PathVariable("id") int id) {
+		PatientModel patient = patientService.getById(id);
+		HttpHeaders headers = new HttpHeaders();
+		List<VisitModel> visits = null;
+		if (null != patient) {
+			visits = visitService.getAllVisitsOfPatient(patient.getId());
+		} else {
+			headers.add("errorMessage", "Patient ID Invalid");
+		}
+		return new ResponseEntity<List<VisitModel>>(visits, headers, HttpStatus.OK);
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/{id}/visits", consumes = {MediaType.APPLICATION_JSON_VALUE })
+	@ResponseBody
+	public ResponseEntity<VisitModel> saveVisit(@PathVariable("id") int id, @RequestBody VisitModel model, @Context HttpServletRequest httpRequest) {
+		model.setCreatedBy(yuownTokenAuthenticationService.getUser(httpRequest));
+
+		HttpHeaders headers = new HttpHeaders();
+		HttpStatus responseStatus = HttpStatus.BAD_REQUEST;
+
+		PatientModel patient = patientService.getById(id);
+		if (null != patient) {
+			model.setPatientId(patient.getId());
+			visitService.save(model);
+			responseStatus = HttpStatus.OK;
+		}
+		return new ResponseEntity<VisitModel>(model, headers, responseStatus);
 	}
 }

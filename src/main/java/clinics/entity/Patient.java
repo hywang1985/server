@@ -28,10 +28,11 @@ import clinics.enums.Prefix;
         @AttributeOverride(name = "lastName", column = @Column(name = "lastName")),
         @AttributeOverride(name = "mobile", column = @Column(name = "mobile")),
         @AttributeOverride(name = "address", column = @Column(name = "address")),
-        @AttributeOverride(name = "dob", column = @Column(name = "dob")),
+        @AttributeOverride(name = "dob", column = @Column(name = "dob", columnDefinition = "default 1")),
         @AttributeOverride(name = "age", column = @Column(name = "age")),
         @AttributeOverride(name = "gender", column = @Column(name = "gender")),
         @AttributeOverride(name = "prefix", column = @Column(name = "prefix")),
+        @AttributeOverride(name = "bloodGroup", column = @Column(name = "bloodgroup")),
         @AttributeOverride(name = "createdDate", column = @Column(name = "create_date")),
         @AttributeOverride(name = "modifiedDate", column = @Column(name = "update_date")),
         @AttributeOverride(name = "createdBy", column = @Column(name = "user_entered")),
@@ -49,20 +50,16 @@ public class Patient extends BaseEntity<Integer> implements Serializable {
 
 	private String address;
 
-	private Date dob;
+	private String dob;
 
 	private byte age;
 
 	private Gender sex;
-	
+
 	private Prefix prefix;
-	
-	private Double weight;
 
-	private Double height;
+	private int bloodGroup;
 
-	private String bloodGroup;
-	
 	private Date createdDate;
 
 	private Date modifiedDate;
@@ -87,7 +84,7 @@ public class Patient extends BaseEntity<Integer> implements Serializable {
 		return address;
 	}
 
-	public Date getDob() {
+	public String getDob() {
 		return dob;
 	}
 
@@ -119,7 +116,7 @@ public class Patient extends BaseEntity<Integer> implements Serializable {
 		this.address = address;
 	}
 
-	public void setDob(Date dob) {
+	public void setDob(String dob) {
 		this.dob = dob;
 	}
 
@@ -135,27 +132,11 @@ public class Patient extends BaseEntity<Integer> implements Serializable {
 		this.prefix = prefix;
 	}
 
-	public Double getWeight() {
-		return weight;
-	}
-
-	public Double getHeight() {
-		return height;
-	}
-
-	public String getBloodGroup() {
+	public int getBloodGroup() {
 		return bloodGroup;
 	}
 
-	public void setWeight(Double weight) {
-		this.weight = weight;
-	}
-
-	public void setHeight(Double height) {
-		this.height = height;
-	}
-
-	public void setBloodGroup(String bloodGroup) {
+	public void setBloodGroup(int bloodGroup) {
 		this.bloodGroup = bloodGroup;
 	}
 

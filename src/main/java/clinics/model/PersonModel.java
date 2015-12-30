@@ -1,7 +1,5 @@
 package clinics.model;
 
-import java.util.Date;
-
 import clinics.enums.Gender;
 import clinics.enums.Prefix;
 
@@ -20,14 +18,14 @@ public class PersonModel extends Model {
 
 	private String address;
 
-	private Date dob;
+	private String dob;
 
 	private byte age;
 
 	private Gender sex;
-	
+
 	private Prefix prefix;
-	
+
 	public String getFirstName() {
 		return firstName;
 	}
@@ -60,11 +58,11 @@ public class PersonModel extends Model {
 		this.address = address;
 	}
 
-	public Date getDob() {
+	public String getDob() {
 		return dob;
 	}
 
-	public void setDob(Date dob) {
+	public void setDob(String dob) {
 		this.dob = dob;
 	}
 

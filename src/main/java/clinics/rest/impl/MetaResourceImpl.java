@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import clinics.enums.Gender;
 import clinics.enums.Prefix;
+import clinics.enums.VisitType;
 
 @RestController
 @RequestMapping(value = "/meta", produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -33,6 +34,17 @@ public class MetaResourceImpl {
 		Prefix[] all = Prefix.values();
 		Set<String> asSet = new HashSet<String>();
 		for (Prefix each : all) {
+			asSet.add(each.toString());
+		}
+		return asSet;
+	}
+	
+	@RequestMapping(value = "/visitTypes", method = RequestMethod.GET)
+	@ResponseBody
+	public Set<String> visitTypes() {
+		VisitType[] all = VisitType.values();
+		Set<String> asSet = new HashSet<String>();
+		for (VisitType each : all) {
 			asSet.add(each.toString());
 		}
 		return asSet;
