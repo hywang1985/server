@@ -1,31 +1,89 @@
 CREATE DATABASE `clinics`;
 
+CREATE TABLE `authorities` (
+  `username` varchar(50) NOT NULL,
+  `authority` varchar(50) NOT NULL,
+  UNIQUE KEY `authorities_idx_1` (`username`,`authority`),
+  CONSTRAINT `authorities_ibfk_1` FOREIGN KEY (`username`) REFERENCES `users` (`username`)
+);
+
+CREATE TABLE `bloodgroups` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `NAME` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`ID`)
+);
+
 CREATE TABLE `categories` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(10) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `NAME` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`ID`)
 );
 
 CREATE TABLE `configuration` (
+  `ID` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) DEFAULT NULL,
+  `str_value` varchar(255) DEFAULT NULL,
+  `value` int(11) DEFAULT NULL,
+  `load_on_startup` bit(1) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`ID`)
+);
+
+
+CREATE TABLE `group_authorities` (
+  `group_id` bigint(20) unsigned NOT NULL,
+  `authority` varchar(50) NOT NULL,
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) DEFAULT NULL,
-  `value` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `group_id` (`group_id`),
+  CONSTRAINT `group_authorities_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`)
+);
+
+CREATE TABLE `group_members` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `username` varchar(50) NOT NULL,
+  `group_id` bigint(20) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `group_id` (`group_id`),
+  CONSTRAINT `group_members_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`)
+);
+
+CREATE TABLE `groups` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `group_name` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `stock_type` (
+CREATE TABLE `patients` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) DEFAULT NULL,
-  `method` varchar(10) DEFAULT NULL,
-  `remove` tinyint(1) DEFAULT NULL,
+  `address` varchar(255) DEFAULT NULL,
+  `age` tinyint(4) DEFAULT NULL,
+  `user_entered` int(11) DEFAULT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `firstName` varchar(255) DEFAULT NULL,
+  `lastName` varchar(255) DEFAULT NULL,
+  `mobile` varchar(255) DEFAULT NULL,
+  `user_updated` int(11) DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL,
+  `prefix` int(11) DEFAULT NULL,
+  `sex` int(11) DEFAULT NULL,
+  `bloodGroup` int(11) DEFAULT '0',
+  `height` double DEFAULT NULL,
+  `weight` double DEFAULT NULL,
+  `dob` varchar(30) DEFAULT '1',
+  `body_temp` int(11) DEFAULT NULL,
+  `diastolic_bp` int(11) DEFAULT NULL,
+  `respi_rate` int(11) DEFAULT NULL,
+  `systolic_bp` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`)
 );
 
-CREATE TABLE `suppliers` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) DEFAULT NULL,
-  `description` varchar(200) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+CREATE TABLE `persistent_logins` (
+  `username` varchar(64) NOT NULL,
+  `series` varchar(64) NOT NULL,
+  `token` varchar(64) NOT NULL,
+  `last_used` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`series`)
 );
 
 CREATE TABLE `users` (
@@ -37,71 +95,26 @@ CREATE TABLE `users` (
   PRIMARY KEY (`username`)
 );
 
-CREATE TABLE `authorities` (
-  `username` varchar(50) NOT NULL,
-  `authority` varchar(50) NOT NULL,
-  UNIQUE KEY `authorities_idx_1` (`username`,`authority`),
-  CONSTRAINT `authorities_ibfk_1` FOREIGN KEY (`username`) REFERENCES `users` (`username`)
-);
-
-CREATE TABLE `items` (
+CREATE TABLE `visits` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) DEFAULT NULL,
-  `type` varchar(45) DEFAULT NULL,
-  `weight` double DEFAULT NULL,
-  `category` int(11) DEFAULT NULL,
-  `create_date` bigint(20) DEFAULT '0',
-  `update_date` bigint(20) DEFAULT '0',
-  `stock_type` int(11) DEFAULT NULL,
+  `body_temp` int(11) DEFAULT NULL,
   `user_entered` int(11) DEFAULT NULL,
-  `supplier` int(11) DEFAULT NULL,
-  `lend_to` int(11) DEFAULT NULL,
-  `lend_date` bigint(20) DEFAULT '0',
-  `lend_description` varchar(200) DEFAULT NULL,
-  `sold` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `items2stock_type_idx` (`stock_type`),
-  KEY `items2supplier_idx` (`supplier`),
-  KEY `items2user_idx` (`user_entered`),
-  KEY `itemlendto` (`lend_to`),
-  KEY `item2category_idx` (`category`),
-  CONSTRAINT `item2category` FOREIGN KEY (`category`) REFERENCES `categories` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `itemlendto` FOREIGN KEY (`lend_to`) REFERENCES `suppliers` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `items2stock_type` FOREIGN KEY (`stock_type`) REFERENCES `stock_type` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `items2supplier` FOREIGN KEY (`supplier`) REFERENCES `suppliers` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-);
-
-CREATE TABLE `persistent_logins` (
-  `username` varchar(64) NOT NULL,
-  `series` varchar(64) NOT NULL,
-  `token` varchar(64) NOT NULL,
-  `last_used` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`series`)
-);
-
-CREATE TABLE `groups` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `group_name` varchar(50) NOT NULL,
+  `create_date` datetime DEFAULT NULL,
+  `diastolic_bp` int(11) DEFAULT NULL,
+  `discharge_date` varchar(255) DEFAULT NULL,
+  `height` double DEFAULT NULL,
+  `user_updated` int(11) DEFAULT NULL,
+  `update_date` datetime DEFAULT NULL,
+  `patient_id` int(11) DEFAULT NULL,
+  `reason` varchar(255) DEFAULT NULL,
+  `referred_by` int(11) DEFAULT NULL,
+  `respi_rate` int(11) DEFAULT NULL,
+  `room` int(11) DEFAULT NULL,
+  `systolic_bp` int(11) DEFAULT NULL,
+  `visit_type` int(11) DEFAULT NULL,
+  `visit_date` varchar(255) DEFAULT NULL,
+  `weight` double DEFAULT NULL,
   PRIMARY KEY (`id`)
-);
-
-CREATE TABLE `group_authorities` (
-  `group_id` bigint(20) unsigned NOT NULL,
-  `authority` varchar(50) NOT NULL,
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  PRIMARY KEY (`id`),
-  KEY `group_id` (`group_id`),
-  CONSTRAINT `group_authorities_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`)
-);
-
-
-CREATE TABLE `group_members` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `username` varchar(50) NOT NULL,
-  `group_id` bigint(20) unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `group_id` (`group_id`),
-  CONSTRAINT `group_members_ibfk_1` FOREIGN KEY (`group_id`) REFERENCES `groups` (`id`)
 );
 
 INSERT INTO `clinics`.`groups` (`id`, `group_name`) VALUES (1, 'USERS');
@@ -116,4 +129,3 @@ INSERT INTO `clinics`.`group_authorities` (`group_id`, `authority`) VALUES (1,"R
 INSERT INTO `clinics`.`group_authorities` (`group_id`, `authority`) VALUES (1,"ROLE_EDIT_PATIENTS");
 INSERT INTO `clinics`.`group_authorities` (`group_id`, `authority`) VALUES (1,"ROLE_REPORTS");
 INSERT INTO `clinics`.`group_authorities` (`group_id`, `authority`) VALUES (1,"ROLE_USER_MANAGER");
-
