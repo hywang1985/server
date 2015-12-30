@@ -1,5 +1,7 @@
 package clinics.transformer;
 
+import java.util.Date;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -24,6 +26,11 @@ public class PatientTransformer extends AbstractDTOTransformer<PatientModel, Pat
 			try {
 				dest = new Patient();
 				BeanUtils.copyProperties(source, dest, FROM_EXCLUDES);
+				if(dest.getId() == null) {
+					dest.setCreatedDate(new Date());
+				} else {
+					dest.setModifiedDate(new Date());
+				}
 			} catch (Exception e) {
 				dest = null;
 			}

@@ -57,6 +57,12 @@ public class Patient extends BaseEntity<Integer> implements Serializable {
 	
 	private Prefix prefix;
 	
+	private Double weight;
+
+	private Double height;
+
+	private String bloodGroup;
+	
 	private Date createdDate;
 
 	private Date modifiedDate;
@@ -127,6 +133,30 @@ public class Patient extends BaseEntity<Integer> implements Serializable {
 
 	public void setPrefix(Prefix prefix) {
 		this.prefix = prefix;
+	}
+
+	public Double getWeight() {
+		return weight;
+	}
+
+	public Double getHeight() {
+		return height;
+	}
+
+	public String getBloodGroup() {
+		return bloodGroup;
+	}
+
+	public void setWeight(Double weight) {
+		this.weight = weight;
+	}
+
+	public void setHeight(Double height) {
+		this.height = height;
+	}
+
+	public void setBloodGroup(String bloodGroup) {
+		this.bloodGroup = bloodGroup;
 	}
 
 	public Date getCreatedDate() {
