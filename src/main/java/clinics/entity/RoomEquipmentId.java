@@ -3,36 +3,32 @@ package clinics.entity;
 import java.io.Serializable;
 
 import javax.persistence.Embeddable;
-import javax.persistence.ManyToOne;
 
 @Embeddable
-public class RoomEquipmentId implements Serializable {
+public class RoomEquipmentId extends CompositeID<Integer, Integer> implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7630068430046310767L;
 
-	private Room room;
+	private Integer room;
 
-	private Equipment equipment;
+	private Integer equipment;
 
-	@ManyToOne
-	public Room getRoom() {
+	public Integer getE1() {
 		return room;
 	}
 
-	@ManyToOne
-	public Equipment getEquipment() {
+	public Integer getE2() {
 		return equipment;
 	}
 
-	public void setRoom(Room room) {
+	public void setE1(Integer room) {
 		this.room = room;
 	}
 
-	public void setEquipment(Equipment equipment) {
+	public void setE2(Integer equipment) {
 		this.equipment = equipment;
 	}
-
 }

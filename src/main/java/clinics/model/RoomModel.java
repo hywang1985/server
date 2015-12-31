@@ -1,5 +1,10 @@
 package clinics.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import clinics.model.meta.RoomEquipmentModel;
+
 public class RoomModel extends Model {
 
 	/**
@@ -14,6 +19,8 @@ public class RoomModel extends Model {
 	private Integer occupancy;
 
 	private Boolean allotable;
+	
+	private List<RoomEquipmentModel> equipments = new ArrayList<RoomEquipmentModel>();
 
 	public String getName() {
 		return name;
@@ -45,6 +52,14 @@ public class RoomModel extends Model {
 
 	public void setAllotable(Boolean allotable) {
 		this.allotable = allotable;
+	}
+
+	public List<RoomEquipmentModel> getEquipments() {
+		return equipments;
+	}
+
+	public void setEquipments(List<RoomEquipmentModel> equipments) {
+		this.equipments = equipments;
 	}
 
 }
