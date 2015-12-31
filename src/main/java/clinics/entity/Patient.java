@@ -28,7 +28,7 @@ import clinics.enums.Prefix;
         @AttributeOverride(name = "lastName", column = @Column(name = "lastName")),
         @AttributeOverride(name = "mobile", column = @Column(name = "mobile")),
         @AttributeOverride(name = "address", column = @Column(name = "address")),
-        @AttributeOverride(name = "dob", column = @Column(name = "dob", columnDefinition = "default 1")),
+        @AttributeOverride(name = "dob", column = @Column(name = "dob")),
         @AttributeOverride(name = "age", column = @Column(name = "age")),
         @AttributeOverride(name = "gender", column = @Column(name = "gender")),
         @AttributeOverride(name = "prefix", column = @Column(name = "prefix")),
