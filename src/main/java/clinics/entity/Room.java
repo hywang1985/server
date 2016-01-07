@@ -1,14 +1,18 @@
 package clinics.entity;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -35,6 +39,8 @@ public class Room extends BaseEntity<Integer> implements Serializable {
 	private Integer occupancy;
 
 	private Boolean allotable;
+	
+	private Set<RoomEquipments> equipments = new HashSet<RoomEquipments>();
 
 	public String getName() {
 		return name;
@@ -66,6 +72,15 @@ public class Room extends BaseEntity<Integer> implements Serializable {
 
 	public void setAllotable(Boolean allotable) {
 		this.allotable = allotable;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "id.room")
+	public Set<RoomEquipments> getEquipments() {
+		return equipments;
+	}
+	
+	public void setEquipments(Set<RoomEquipments> equipments) {
+		this.equipments = equipments;
 	}
 
 	@Override

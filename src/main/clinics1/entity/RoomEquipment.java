@@ -14,16 +14,16 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "ROOM_EQUIPMENT", uniqueConstraints = @UniqueConstraint(columnNames = { "ROOM_ID", "EQUIPMENT_ID" }) )
+@Table(name = "ROOM_EQUIPMENT")
 @AttributeOverrides( value = {
-    @AttributeOverride(name = "quantity", column = @Column(name = "quantity")),
-    @AttributeOverride(name = "room", column = @Column(name = "ROOM_ID", insertable = false, updatable = false)),
-    @AttributeOverride(name = "equipment", column = @Column(name = "EQUIPMENT_ID", insertable = false, updatable = false))
+    @AttributeOverride(name = "quantity", column = @Column(name = "quantity"))//,
+//    @AttributeOverride(name = "room", column = @Column(name = "ROOM_ID", insertable = false, updatable = false)),
+//    @AttributeOverride(name = "equipment", column = @Column(name = "EQUIPMENT_ID", insertable = false, updatable = false))
 })
-//@AssociationOverrides({
-//	@AssociationOverride(name = "id.room",  joinColumns = @JoinColumn(name = "ROOM_ID")),
-//	@AssociationOverride(name = "id.equipment",  joinColumns = @JoinColumn(name = "EQUIPMENT_ID"))
-//})
+@AssociationOverrides({
+	@AssociationOverride(name = "id.room",  joinColumns = @JoinColumn(name = "ROOM_ID")),
+	@AssociationOverride(name = "id.equipment",  joinColumns = @JoinColumn(name = "EQUIPMENT_ID"))
+})
 public class RoomEquipment extends BaseEntity<RoomEquipmentId> implements Serializable {
 
 	/**

@@ -1,11 +1,11 @@
 package clinics.entity;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -18,7 +18,6 @@ import javax.persistence.UniqueConstraint;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
 @Entity
 @Table(name = "EQUIPMENTS", uniqueConstraints = @UniqueConstraint(columnNames = { "id" }))
@@ -42,6 +41,8 @@ public class Equipment extends BaseEntity<Integer> implements Serializable {
 
 	private Boolean common;
 	
+	private Set<RoomEquipments> rooms = new HashSet<RoomEquipments>();
+
 	public String getName() {
 		return name;
 	}
@@ -72,6 +73,15 @@ public class Equipment extends BaseEntity<Integer> implements Serializable {
 
 	public void setCommon(Boolean common) {
 		this.common = common;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "id.equipment")
+	public Set<RoomEquipments> getRooms() {
+		return rooms;
+	}
+
+	public void setRooms(Set<RoomEquipments> rooms) {
+		this.rooms = rooms;
 	}
 
 	@Override

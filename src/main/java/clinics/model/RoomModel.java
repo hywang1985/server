@@ -3,8 +3,6 @@ package clinics.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import clinics.model.meta.RoomEquipmentModel;
-
 public class RoomModel extends Model {
 
 	/**
@@ -20,7 +18,7 @@ public class RoomModel extends Model {
 
 	private Boolean allotable;
 	
-	private List<RoomEquipmentModel> equipments = new ArrayList<RoomEquipmentModel>();
+	private List<IdValueModel> equipments = new ArrayList<IdValueModel>();
 
 	public String getName() {
 		return name;
@@ -54,11 +52,11 @@ public class RoomModel extends Model {
 		this.allotable = allotable;
 	}
 
-	public List<RoomEquipmentModel> getEquipments() {
+	public List<IdValueModel> getEquipments() {
 		return equipments;
 	}
 
-	public void setEquipments(List<RoomEquipmentModel> equipments) {
+	public void setEquipments(List<IdValueModel> equipments) {
 		this.equipments = equipments;
 	}
 

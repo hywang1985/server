@@ -1,16 +1,19 @@
 package clinics.business.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import clinics.entity.Equipment;
 import clinics.entity.Room;
-import clinics.jpa.services.RoomEquipmentRepositoryService;
+import clinics.entity.RoomEquipmentId;
+import clinics.entity.RoomEquipments;
+import clinics.jpa.services.EquipmentRepositoryService;
 import clinics.jpa.services.RoomRepositoryService;
+import clinics.model.IdValueModel;
 import clinics.model.RoomModel;
-import clinics.model.meta.RoomEquipmentModel;
-import clinics.transformer.RoomEquipmentTransformer;
 import clinics.transformer.RoomTransformer;
 
 @Service
@@ -20,13 +23,10 @@ public class RoomService extends AbstractServiceImpl<Integer, RoomModel, Room, R
 	private RoomRepositoryService roomRepositoryService;
 
 	@Autowired
-	private RoomEquipmentRepositoryService roomEquipmentRepositoryService;
-
-	@Autowired
 	private RoomTransformer roomTransformer;
 
 	@Autowired
-	private RoomEquipmentTransformer roomEquipmentTransformer;
+	private EquipmentRepositoryService equipmentRepositoryService;
 
 	@Override
 	protected RoomRepositoryService repoService() {
@@ -44,23 +44,41 @@ public class RoomService extends AbstractServiceImpl<Integer, RoomModel, Room, R
 
 	@Override
 	public RoomModel save(RoomModel resource) {
-		RoomModel response = super.save(resource);
-		for (RoomEquipmentModel roomEquipment : resource.getEquipments()) {
-			roomEquipmentRepositoryService.save(roomEquipmentTransformer.transformFrom(roomEquipment));
+		Room room = transformer().transformFrom(resource);
+		List<IdValueModel> equipments = resource.getEquipments();
+		if (null != equipments) {
+			for (IdValueModel equipId : equipments) {
+				Equipment e = equipmentRepositoryService.findOne(equipId.getId());
+				if (e != null) {
+					RoomEquipments equip = new RoomEquipments();
+					if (null != e.getCommon() && e.getCommon()) {
+						equip.setQuantity(equipId.getValue());
+					} else {
+						equip.setQuantity(1);
+					}
+					RoomEquipmentId id = new RoomEquipmentId();
+					id.setRoom(room);
+					id.setEquipment(e);
+					equip.setId(id);
+					room.getEquipments().add(equip);
+				}
+			}
 		}
-		return response;
+		repoService().save(room);
+		return resource;
 	}
 
 	@Override
 	public List<RoomModel> getAll() {
-		List<RoomModel> response = super.getAll();
-		for (RoomModel roomModel : response) {
-			List<RoomEquipmentModel> equips = roomEquipmentTransformer
-					.transformTo(roomEquipmentRepositoryService.findAllByRoomId(roomModel.getId()));
-			if (equips != null && equips.size() > 0) {
-				roomModel.getEquipments().addAll(equips);
+		List<Room> entities = repoService().findAll();
+		List<RoomModel> result = new ArrayList<RoomModel>();
+		for (Room room : entities) {
+			RoomModel m = transformer().transformTo(room);
+			for (RoomEquipments roomEquip : room.getEquipments()) {
+				m.getEquipments().add(new IdValueModel(roomEquip.getEquipment().getId(), roomEquip.getQuantity()));
 			}
+			result.add(m);
 		}
-		return response;
+		return result;
 	}
 }
