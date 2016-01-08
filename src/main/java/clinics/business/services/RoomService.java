@@ -8,8 +8,7 @@ import org.springframework.stereotype.Service;
 
 import clinics.entity.Equipment;
 import clinics.entity.Room;
-import clinics.entity.RoomEquipmentId;
-import clinics.entity.RoomEquipments;
+import clinics.entity.RoomEquipment;
 import clinics.jpa.services.EquipmentRepositoryService;
 import clinics.jpa.services.RoomRepositoryService;
 import clinics.model.IdValueModel;
@@ -50,21 +49,20 @@ public class RoomService extends AbstractServiceImpl<Integer, RoomModel, Room, R
 			for (IdValueModel equipId : equipments) {
 				Equipment e = equipmentRepositoryService.findOne(equipId.getId());
 				if (e != null) {
-					RoomEquipments equip = new RoomEquipments();
+					RoomEquipment equip = new RoomEquipment();
 					if (null != e.getCommon() && e.getCommon()) {
 						equip.setQuantity(equipId.getValue());
 					} else {
 						equip.setQuantity(1);
 					}
-					RoomEquipmentId id = new RoomEquipmentId();
-					id.setRoom(room);
-					id.setEquipment(e);
-					equip.setId(id);
-					room.getEquipments().add(equip);
+					equip.setRoom(room);
+					equip.setEquipment(e);
+			        room.getRoomEquipments().add(equip);
+			        equipmentRepositoryService.save(e);
+			        repoService().save(room);
 				}
 			}
 		}
-		repoService().save(room);
 		return resource;
 	}
 
@@ -73,12 +71,17 @@ public class RoomService extends AbstractServiceImpl<Integer, RoomModel, Room, R
 		List<Room> entities = repoService().findAll();
 		List<RoomModel> result = new ArrayList<RoomModel>();
 		for (Room room : entities) {
-			RoomModel m = transformer().transformTo(room);
-			for (RoomEquipments roomEquip : room.getEquipments()) {
-				m.getEquipments().add(new IdValueModel(roomEquip.getEquipment().getId(), roomEquip.getQuantity()));
-			}
+			RoomModel m = toModel(room);
 			result.add(m);
 		}
 		return result;
+	}
+
+	private RoomModel toModel(Room room) {
+		RoomModel m = transformer().transformTo(room);
+		for (RoomEquipment roomEquip : room.getRoomEquipments()) {
+			m.getEquipments().add(new IdValueModel(roomEquip.getEquipment().getId(), roomEquip.getQuantity()));
+		}
+		return m;
 	}
 }

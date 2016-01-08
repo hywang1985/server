@@ -1,14 +1,13 @@
 package clinics.entity;
 
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -16,99 +15,77 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-
 @Entity
-@Table(name = "ROOMS", uniqueConstraints = @UniqueConstraint(columnNames = { "id" }))
-@AttributeOverrides(value = {
-		@AttributeOverride(name = "id", column = @Column(name = "ID", insertable = false, updatable = false)),
-		@AttributeOverride(name = "name", column = @Column(name = "name")),
-		@AttributeOverride(name = "description", column = @Column(name = "description")),
-		@AttributeOverride(name = "occupancy", column = @Column(name = "occupancy")),
-		@AttributeOverride(name = "allotable", column = @Column(name = "allotable"))
+@Table(name = "room", uniqueConstraints = @UniqueConstraint(columnNames = { "id" }))
+@AttributeOverrides( value = 
+{
+    @AttributeOverride(name = "id", column = @Column(name = "ID", insertable = false, updatable = false)),
+    @AttributeOverride(name = "name", column = @Column(name = "name")),
+    @AttributeOverride(name = "description", column = @Column(name = "description")),
+    @AttributeOverride(name = "allotable", column = @Column(name = "allotable")),
+    @AttributeOverride(name = "occupancy", column = @Column(name = "occupancy"))
 })
-public class Room extends BaseEntity<Integer> implements Serializable {
-
-	private static final long serialVersionUID = 4289151143888117381L;
-
-	private String name;
-
-	private String description;
-
-	private Integer occupancy;
-
+public class Room extends BaseEntity<Integer> {
 	private Boolean allotable;
-	
-	private Set<RoomEquipments> equipments = new HashSet<RoomEquipments>();
+	private String description;
+	private String name;
+	private Integer occupancy;
+	private Set<RoomEquipment> roomEquipments;
 
-	public String getName() {
-		return name;
-	}
-
-	public String getDescription() {
-		return description;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public Integer getOccupancy() {
-		return occupancy;
+	public Room() {
+		roomEquipments = new HashSet<>();
 	}
 
 	public Boolean getAllotable() {
 		return allotable;
 	}
 
-	public void setOccupancy(Integer occupancy) {
-		this.occupancy = occupancy;
-	}
-
-	public void setAllotable(Boolean allotable) {
-		this.allotable = allotable;
-	}
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "id.room")
-	public Set<RoomEquipments> getEquipments() {
-		return equipments;
-	}
-	
-	public void setEquipments(Set<RoomEquipments> equipments) {
-		this.equipments = equipments;
+	public String getDescription() {
+		return description;
 	}
 
 	@Override
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	public Integer getId() {
-		return this.id;
+		return id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public Integer getOccupancy() {
+		return occupancy;
+	}
+
+	@OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
+	public Set<RoomEquipment> getRoomEquipments() {
+		return roomEquipments;
+	}
+
+	public void setAllotable(Boolean allotable) {
+		this.allotable = allotable;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
 	@Override
 	public void setId(Integer id) {
-		this.id = id;
+		super.id = id;
 	}
 
-	@Override
-	public int hashCode() {
-		return (new HashCodeBuilder()).append(this.id).toHashCode();
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Room rhs = (Room) obj;
-		return (new EqualsBuilder()).append(this.id, rhs.id).isEquals();
+	public void setOccupancy(Integer occupancy) {
+		this.occupancy = occupancy;
+	}
+
+	public void setRoomEquipments(Set<RoomEquipment> roomEquipments) {
+		this.roomEquipments = roomEquipments;
 	}
 }

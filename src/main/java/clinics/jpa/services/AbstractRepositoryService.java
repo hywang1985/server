@@ -21,6 +21,10 @@ public abstract class AbstractRepositoryService<R extends BaseRepository<E, ID>,
 	public E save(E entity) {
 		return repository().save(entity);
 	}
+	
+	public E saveAndFlush(E entity) {
+		return repository().saveAndFlush(entity);
+	}
 
 	public E findOne(ID id) {
 		return repository().findOne(id);
