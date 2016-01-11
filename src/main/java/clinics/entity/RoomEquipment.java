@@ -2,65 +2,31 @@ package clinics.entity;
 
 import java.io.Serializable;
 
-import javax.persistence.CascadeType;
+import javax.persistence.AssociationOverride;
+import javax.persistence.AssociationOverrides;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "room_equipment")
-public class RoomEquipment implements Serializable {
+@AssociationOverrides({
+	@AssociationOverride(name = "id.room", joinColumns = @JoinColumn(name = "room_id", insertable = false, updatable = false) ),
+	@AssociationOverride(name = "id.equipment", joinColumns = @JoinColumn(name = "equipment_id", insertable = false, updatable = false) )
+})
+public class RoomEquipment extends BaseEntity<RoomEquipmentId> implements Serializable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 4435473629958196511L;
 
-	private Equipment equipment;
 	private Integer quantity;
-	private Room room;
-
-	@Id
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-	@JoinColumn(name = "equipment_id", referencedColumnName = "id")
-	public Equipment getEquipment() {
-		return equipment;
-	}
-
-	@Column(name = "quantity")
-	public Integer getQuantity() {
-		return quantity;
-	}
-
-	@Id
-	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
-	@JoinColumn(name = "room_id", referencedColumnName = "id")
-	public Room getRoom() {
-		return room;
-	}
-
-	public void setEquipment(Equipment equipment) {
-		this.equipment = equipment;
-	}
-
-	public void setQuantity(Integer quantity) {
-		this.quantity = quantity;
-	}
-
-	public void setRoom(Room room) {
-		this.room = room;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((equipment == null) ? 0 : equipment.hashCode());
-		result = prime * result + ((quantity == null) ? 0 : quantity.hashCode());
-		result = prime * result + ((room == null) ? 0 : room.hashCode());
-		return result;
+	
+	public RoomEquipment() {
+		this.id = new RoomEquipmentId();
 	}
 
 	@Override
@@ -72,23 +38,57 @@ public class RoomEquipment implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		RoomEquipment other = (RoomEquipment) obj;
-		if (equipment == null) {
-			if (other.equipment != null)
+		if (id == null) {
+			if (other.id != null)
 				return false;
-		} else if (!equipment.equals(other.equipment))
-			return false;
-		if (quantity == null) {
-			if (other.quantity != null)
-				return false;
-		} else if (!quantity.equals(other.quantity))
-			return false;
-		if (room == null) {
-			if (other.room != null)
-				return false;
-		} else if (!room.equals(other.room))
+		} else if (!id.equals(other.id))
 			return false;
 		return true;
 	}
-	
-	
+
+	@Transient
+	public Equipment getEquipment() {
+		return getId().getEquipment();
+	}
+
+	@Override
+	@EmbeddedId
+	public RoomEquipmentId getId() {
+		return id;
+	}
+
+	@Column(name = "quantity")
+	public Integer getQuantity() {
+		return quantity;
+	}
+
+	@Transient
+	public Room getRoom() {
+		return getId().getRoom();
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+
+	public void setEquipment(Equipment equipment) {
+		this.getId().setEquipment(equipment);
+	}
+
+	@Override
+	public void setId(RoomEquipmentId id) {
+		this.id = id;
+	}
+
+	public void setQuantity(Integer quantity) {
+		this.quantity = quantity;
+	}
+
+	public void setRoom(Room room) {
+		this.getId().setRoom(room);
+	}
 }

@@ -16,14 +16,13 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "room", uniqueConstraints = @UniqueConstraint(columnNames = { "id" }))
-@AttributeOverrides( value = 
-{
-    @AttributeOverride(name = "id", column = @Column(name = "ID", insertable = false, updatable = false)),
-    @AttributeOverride(name = "name", column = @Column(name = "name")),
-    @AttributeOverride(name = "description", column = @Column(name = "description")),
-    @AttributeOverride(name = "allotable", column = @Column(name = "allotable")),
-    @AttributeOverride(name = "occupancy", column = @Column(name = "occupancy"))
+@Table(name = "room", uniqueConstraints = @UniqueConstraint(columnNames = { "id" }) )
+@AttributeOverrides(value = {
+		@AttributeOverride(name = "id", column = @Column(name = "ID", insertable = false, updatable = false) ),
+		@AttributeOverride(name = "name", column = @Column(name = "name") ),
+		@AttributeOverride(name = "description", column = @Column(name = "description") ),
+		@AttributeOverride(name = "allotable", column = @Column(name = "allotable") ),
+		@AttributeOverride(name = "occupancy", column = @Column(name = "occupancy") )
 })
 public class Room extends BaseEntity<Integer> {
 	private Boolean allotable;
@@ -34,6 +33,56 @@ public class Room extends BaseEntity<Integer> {
 
 	public Room() {
 		roomEquipments = new HashSet<>();
+	}
+
+	public void addEquipment(Equipment e, Integer quantity) {
+		RoomEquipment roomEquip = new RoomEquipment();
+		roomEquip.setRoom(this);
+		roomEquip.setEquipment(e);
+		roomEquip.setQuantity(quantity);
+		roomEquipments.add(roomEquip);
+	}
+	
+	public void updateEquipment(RoomEquipment roomEquip) {
+		roomEquip.setRoom(this);
+		roomEquipments.add(roomEquip);
+	}
+	
+	public boolean hasEquipment(Integer equipmentId) {
+		boolean flag = false;
+		for (RoomEquipment roomEquipment : this.getRoomEquipments()) {
+			if (roomEquipment.getId().getEquipment().getId() == equipmentId) {
+				flag = true;
+				break;
+			}
+		}
+		return flag;
+	}
+	
+	public RoomEquipment getRoomEquipment(Integer equipmentId) {
+		for (RoomEquipment roomEquipment : getRoomEquipments()) {
+			if (roomEquipment.getId().getEquipment().getId() == equipmentId) {
+				return roomEquipment;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Room other = (Room) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
 	}
 
 	public Boolean getAllotable() {
@@ -59,9 +108,17 @@ public class Room extends BaseEntity<Integer> {
 		return occupancy;
 	}
 
-	@OneToMany(mappedBy = "room", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@OneToMany(mappedBy = "id.room", cascade = CascadeType.ALL)
 	public Set<RoomEquipment> getRoomEquipments() {
 		return roomEquipments;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
 	}
 
 	public void setAllotable(Boolean allotable) {
@@ -87,38 +144,5 @@ public class Room extends BaseEntity<Integer> {
 
 	public void setRoomEquipments(Set<RoomEquipment> roomEquipments) {
 		this.roomEquipments = roomEquipments;
-	}
-	
-	public void addEquipment(Equipment e, Integer quantity) {
-		RoomEquipment roomEquip = new RoomEquipment();
-		roomEquip.setRoom(this);
-		roomEquip.setEquipment(e);
-		roomEquip.setQuantity(quantity);
-		roomEquipments.add(roomEquip);
-	}
-	
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Room other = (Room) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
 	}
 }

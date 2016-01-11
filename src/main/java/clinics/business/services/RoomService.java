@@ -1,7 +1,9 @@
 package clinics.business.services;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -44,28 +46,37 @@ public class RoomService extends AbstractServiceImpl<Integer, RoomModel, Room, R
 	@Override
 	public RoomModel save(RoomModel resource) {
 		Room room = transformer().transformFrom(resource);
+		Room fromDb = repoService().findOne(room.getId());
+		Set<RoomEquipment> existing = fromDb.getRoomEquipments();
 		List<IdValueModel> equipments = resource.getEquipments();
+
 		if (null != equipments && equipments.size() > 0) {
-			if(room.getId() != null) {
-				room.getRoomEquipments().clear();
-				repoService().save(room);
-			}
 			for (IdValueModel equipId : equipments) {
 				Equipment e = equipmentRepositoryService.findOne(equipId.getId());
 				if (e != null) {
-					Equipment e1 = new Equipment();
-					e1.setId(e.getId());
-					Integer quantity = 1;
-					if (null != e.getCommon() && e.getCommon()) {
-						quantity = equipId.getValue();
+					Integer quantity = evaluateQuantity(equipId, e);
+					if (room.getId() == null) {
+						room.addEquipment(e, quantity);
+					} else {
+						RoomEquipment curr = getRoomEquipment(existing, e.getId());
+						if (curr != null) {
+							curr.setQuantity(quantity);
+							room.updateEquipment(curr);
+						} else {
+							room.addEquipment(e, quantity);
+						}
 					}
-					room.addEquipment(e1, quantity);
-					repoService().save(room);
 				}
 			}
-		} else {
-			repoService().save(room);
 		}
+//		for (Iterator<RoomEquipment> roomEquipmentsIterator = fromDb.getRoomEquipments().iterator(); roomEquipmentsIterator.hasNext();) {
+//			RoomEquipment roomEquipment = roomEquipmentsIterator.next();
+//			if (isRemoved(equipments, roomEquipment)) {
+//				roomEquipmentsIterator.remove();
+//			}
+//		}
+//		repoService().save(fromDb);
+		repoService().save(room);
 		return resource;
 	}
 
@@ -86,5 +97,33 @@ public class RoomService extends AbstractServiceImpl<Integer, RoomModel, Room, R
 			m.getEquipments().add(new IdValueModel(roomEquip.getEquipment().getId(), roomEquip.getQuantity()));
 		}
 		return m;
+	}
+	
+	private Integer evaluateQuantity(IdValueModel equipId, Equipment e) {
+		Integer quantity = 1;
+		if (null != e.getCommon() && e.getCommon()) {
+			quantity = equipId.getValue();
+		}
+		return quantity;
+	}
+	
+	private RoomEquipment getRoomEquipment(Set<RoomEquipment> existing, Integer equipmentId) {
+		for (RoomEquipment roomEquipment : existing) {
+			if (roomEquipment.getId().getEquipment().getId() == equipmentId) {
+				return roomEquipment;
+			}
+		}
+		return null;
+	}
+	
+	private boolean isRemoved(List<IdValueModel> equipments, RoomEquipment roomEquipment) {
+		boolean flag = true;
+		for (IdValueModel idValueModel : equipments) {
+			if (idValueModel.getId() == roomEquipment.getEquipment().getId()) {
+				flag = false;
+				break;
+			}
+		}
+		return flag;
 	}
 }

@@ -16,15 +16,13 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "equipment", uniqueConstraints = @UniqueConstraint(columnNames = { "id" }))
-@AttributeOverrides( value = 
-{
-    @AttributeOverride(name = "id", column = @Column(name = "ID", insertable = false, updatable = false)),
-    @AttributeOverride(name = "name", column = @Column(name = "name")),
-    @AttributeOverride(name = "description", column = @Column(name = "description")),
-    @AttributeOverride(name = "common", column = @Column(name = "common")),
-    @AttributeOverride(name = "working", column = @Column(name = "working"))
-})
+@Table(name = "equipment", uniqueConstraints = @UniqueConstraint(columnNames = { "id" }) )
+@AttributeOverrides(value = {
+		@AttributeOverride(name = "id", column = @Column(name = "ID", insertable = false, updatable = false) ),
+		@AttributeOverride(name = "name", column = @Column(name = "name") ),
+		@AttributeOverride(name = "description", column = @Column(name = "description") ),
+		@AttributeOverride(name = "common", column = @Column(name = "common") ),
+		@AttributeOverride(name = "working", column = @Column(name = "working") ) })
 public class Equipment extends BaseEntity<Integer> {
 	private Boolean common;
 	private String description;
@@ -38,6 +36,23 @@ public class Equipment extends BaseEntity<Integer> {
 
 	public Equipment(String name) {
 		this.name = name;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Equipment other = (Equipment) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
 	}
 
 	public Boolean getCommon() {
@@ -59,13 +74,21 @@ public class Equipment extends BaseEntity<Integer> {
 		return name;
 	}
 
-	@OneToMany(mappedBy = "equipment", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@OneToMany(mappedBy = "id.equipment", cascade = CascadeType.ALL)
 	public Set<RoomEquipment> getRoomEquipments() {
 		return roomEquipments;
 	}
 
 	public Boolean getWorking() {
 		return working;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
 	}
 
 	public void setCommon(Boolean common) {
@@ -91,30 +114,5 @@ public class Equipment extends BaseEntity<Integer> {
 
 	public void setWorking(Boolean working) {
 		this.working = working;
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Equipment other = (Equipment) obj;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		return true;
 	}
 }
