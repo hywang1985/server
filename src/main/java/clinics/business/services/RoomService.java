@@ -45,23 +45,26 @@ public class RoomService extends AbstractServiceImpl<Integer, RoomModel, Room, R
 	public RoomModel save(RoomModel resource) {
 		Room room = transformer().transformFrom(resource);
 		List<IdValueModel> equipments = resource.getEquipments();
-		if (null != equipments) {
+		if (null != equipments && equipments.size() > 0) {
+			if(room.getId() != null) {
+				room.getRoomEquipments().clear();
+				repoService().save(room);
+			}
 			for (IdValueModel equipId : equipments) {
 				Equipment e = equipmentRepositoryService.findOne(equipId.getId());
 				if (e != null) {
-					RoomEquipment equip = new RoomEquipment();
+					Equipment e1 = new Equipment();
+					e1.setId(e.getId());
+					Integer quantity = 1;
 					if (null != e.getCommon() && e.getCommon()) {
-						equip.setQuantity(equipId.getValue());
-					} else {
-						equip.setQuantity(1);
+						quantity = equipId.getValue();
 					}
-					equip.setRoom(room);
-					equip.setEquipment(e);
-			        room.getRoomEquipments().add(equip);
-			        equipmentRepositoryService.save(e);
-			        repoService().save(room);
+					room.addEquipment(e1, quantity);
+					repoService().save(room);
 				}
 			}
+		} else {
+			repoService().save(room);
 		}
 		return resource;
 	}
