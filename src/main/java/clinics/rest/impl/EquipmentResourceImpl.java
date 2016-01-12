@@ -64,12 +64,12 @@ public class EquipmentResourceImpl {
 
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseEntity<List<EquipmentModel>> getAll(@RequestParam(value = "name", required = false) String name) {
+	public ResponseEntity<List<EquipmentModel>> getAll(@RequestParam(value = "name", required = false) String name, @RequestParam(value = "working", required = false) Boolean working) {
 		List<EquipmentModel> items = null;
 		if (StringUtils.isNotBlank(name)) {
 			items = equipmentService.getByName(name);
 		} else {
-			items = equipmentService.getAll();
+			items = equipmentService.getAll(working);
 		}
 		return new ResponseEntity<List<EquipmentModel>>(items, HttpStatus.OK);
 	}

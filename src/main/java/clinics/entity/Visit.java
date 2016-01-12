@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -32,7 +33,6 @@ import clinics.enums.VisitType;
         @AttributeOverride(name = "dBp", column = @Column(name = "diastolic_bp")),
         @AttributeOverride(name = "bodyTemp", column = @Column(name = "body_temp")),
         @AttributeOverride(name = "type", column = @Column(name = "visit_type")),
-        @AttributeOverride(name = "room", column = @Column(name = "room")),
         @AttributeOverride(name = "visitDate", column = @Column(name = "visit_date")),
         @AttributeOverride(name = "dischargeDate", column = @Column(name = "discharge_date")),
         @AttributeOverride(name = "referredBy", column = @Column(name = "referred_by")),
@@ -57,11 +57,11 @@ public class Visit extends BaseEntity<Integer> implements Serializable {
 
 	private Integer dBp;
 
-	private Integer bodyTemp;
+	private Double bodyTemp;
 
 	private VisitType type;
 
-	private Integer room;
+	private Room room;
 
 	private String visitDate;
 
@@ -127,11 +127,11 @@ public class Visit extends BaseEntity<Integer> implements Serializable {
 		this.dBp = dBp;
 	}
 
-	public Integer getBodyTemp() {
+	public Double getBodyTemp() {
 		return bodyTemp;
 	}
 
-	public void setBodyTemp(Integer bodyTemp) {
+	public void setBodyTemp(Double bodyTemp) {
 		this.bodyTemp = bodyTemp;
 	}
 
@@ -143,11 +143,12 @@ public class Visit extends BaseEntity<Integer> implements Serializable {
 		this.type = type;
 	}
 
-	public Integer getRoom() {
+	@ManyToOne
+	public Room getRoom() {
 		return room;
 	}
 
-	public void setRoom(Integer room) {
+	public void setRoom(Room room) {
 		this.room = room;
 	}
 

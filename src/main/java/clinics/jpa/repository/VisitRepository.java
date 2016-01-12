@@ -11,4 +11,6 @@ public interface VisitRepository extends BaseRepository<Visit, Integer> {
 
 	public List<Visit> findByPatientId(Integer patientId);
 
+	public Integer countByRoomIdAndDischargeDateIsNotNull(Integer id);
+
 }

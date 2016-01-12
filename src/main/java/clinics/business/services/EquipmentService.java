@@ -1,11 +1,14 @@
 package clinics.business.services;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import clinics.entity.Equipment;
+import clinics.entity.RoomEquipment;
 import clinics.jpa.services.EquipmentRepositoryService;
 import clinics.model.EquipmentModel;
 import clinics.transformer.EquipmentTransformer;
@@ -35,7 +38,23 @@ public class EquipmentService extends AbstractServiceImpl<Integer, EquipmentMode
 
 	@Override
 	public EquipmentModel save(EquipmentModel resource) {
-		EquipmentModel saved = super.save(resource);
-		return saved;
+		Equipment equipment = transformer().transformFrom(resource);
+		if (null != equipment.getId()) {
+			Equipment fromDb = repoService().findOne(equipment.getId());
+			Set<RoomEquipment> existing = fromDb.getRoomEquipments();
+			equipment.getRoomEquipments().addAll(existing);
+		}
+		repoService().save(equipment);
+		return resource;
+	}
+
+	public List<EquipmentModel> getAll(Boolean working) {
+		List<EquipmentModel> equipments = new ArrayList<EquipmentModel>();
+		if (null == working) {
+			equipments.addAll(super.getAll());
+		} else {
+			equipments.addAll(transformer().transformTo(repoService().findByWorkingItems(working)));
+		}
+		return equipments;
 	}
 }

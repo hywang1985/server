@@ -22,4 +22,8 @@ public class VisitRepositoryService extends AbstractRepositoryService<VisitRepos
 	public List<Visit> findByPatientId(Integer patientId) {
 		return repository().findByPatientId(patientId);
 	}
+
+	public Integer countByRoomId(Integer id) {
+		return repository().countByRoomIdAndDischargeDateIsNotNull(id);
+	}
 }

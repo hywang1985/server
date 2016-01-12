@@ -29,6 +29,7 @@ public class Room extends BaseEntity<Integer> {
 	private String description;
 	private String name;
 	private Integer occupancy;
+	private Boolean occupied;
 	private Set<RoomEquipment> roomEquipments;
 
 	public Room() {
@@ -41,31 +42,6 @@ public class Room extends BaseEntity<Integer> {
 		roomEquip.setEquipment(e);
 		roomEquip.setQuantity(quantity);
 		roomEquipments.add(roomEquip);
-	}
-	
-	public void updateEquipment(RoomEquipment roomEquip) {
-		roomEquip.setRoom(this);
-		roomEquipments.add(roomEquip);
-	}
-	
-	public boolean hasEquipment(Integer equipmentId) {
-		boolean flag = false;
-		for (RoomEquipment roomEquipment : this.getRoomEquipments()) {
-			if (roomEquipment.getId().getEquipment().getId() == equipmentId) {
-				flag = true;
-				break;
-			}
-		}
-		return flag;
-	}
-	
-	public RoomEquipment getRoomEquipment(Integer equipmentId) {
-		for (RoomEquipment roomEquipment : getRoomEquipments()) {
-			if (roomEquipment.getId().getEquipment().getId() == equipmentId) {
-				return roomEquipment;
-			}
-		}
-		return null;
 	}
 
 	@Override
@@ -108,9 +84,33 @@ public class Room extends BaseEntity<Integer> {
 		return occupancy;
 	}
 
+	public Boolean getOccupied() {
+		return occupied;
+	}
+
+	public RoomEquipment getRoomEquipment(Integer equipmentId) {
+		for (RoomEquipment roomEquipment : getRoomEquipments()) {
+			if (roomEquipment.getId().getEquipment().getId() == equipmentId) {
+				return roomEquipment;
+			}
+		}
+		return null;
+	}
+
 	@OneToMany(mappedBy = "id.room", cascade = CascadeType.ALL, orphanRemoval = true)
 	public Set<RoomEquipment> getRoomEquipments() {
 		return roomEquipments;
+	}
+
+	public boolean hasEquipment(Integer equipmentId) {
+		boolean flag = false;
+		for (RoomEquipment roomEquipment : this.getRoomEquipments()) {
+			if (roomEquipment.getId().getEquipment().getId() == equipmentId) {
+				flag = true;
+				break;
+			}
+		}
+		return flag;
 	}
 
 	@Override
@@ -142,7 +142,16 @@ public class Room extends BaseEntity<Integer> {
 		this.occupancy = occupancy;
 	}
 
+	public void setOccupied(Boolean occupied) {
+		this.occupied = occupied;
+	}
+
 	public void setRoomEquipments(Set<RoomEquipment> roomEquipments) {
 		this.roomEquipments = roomEquipments;
+	}
+
+	public void updateEquipment(RoomEquipment roomEquip) {
+		roomEquip.setRoom(this);
+		roomEquipments.add(roomEquip);
 	}
 }

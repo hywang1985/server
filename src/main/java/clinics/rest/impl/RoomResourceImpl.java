@@ -91,4 +91,9 @@ public class RoomResourceImpl {
 			}
 		}
 	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/available")
+	public ResponseEntity<List<RoomModel>> availableRooms() {
+		return new ResponseEntity<List<RoomModel>>(roomService.getAvailableRooms(), HttpStatus.OK);
+	}
 }

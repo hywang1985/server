@@ -21,7 +21,7 @@ public class VisitModel extends Model {
 
 	private Integer dBp;
 
-	private Integer bodyTemp;
+	private Double bodyTemp;
 
 	private VisitType type;
 
@@ -83,11 +83,11 @@ public class VisitModel extends Model {
 		this.dBp = dBp;
 	}
 
-	public Integer getBodyTemp() {
+	public Double getBodyTemp() {
 		return bodyTemp;
 	}
 
-	public void setBodyTemp(Integer bodyTemp) {
+	public void setBodyTemp(Double bodyTemp) {
 		this.bodyTemp = bodyTemp;
 	}
 

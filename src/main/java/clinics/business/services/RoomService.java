@@ -3,6 +3,7 @@ package clinics.business.services;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,9 @@ public class RoomService extends AbstractServiceImpl<Integer, RoomModel, Room, R
 
 	@Autowired
 	private EquipmentRepositoryService equipmentRepositoryService;
+	
+	@Autowired
+	private VisitService visitService;
 
 	@Override
 	protected RoomRepositoryService repoService() {
@@ -76,26 +80,40 @@ public class RoomService extends AbstractServiceImpl<Integer, RoomModel, Room, R
 		repoService().save(room);
 		return resource;
 	}
-
-	@Override
+	
 	public List<RoomModel> getAll() {
-		List<Room> entities = repoService().findAll();
-		List<RoomModel> result = new ArrayList<RoomModel>();
+		return entitiesToModels(repoService().findAll());
+	}
+
+	public List<RoomModel> getAll(Boolean allotable) {
+		List<Room> entities = null;
+		if (null == allotable) {
+			entities = repoService().findAll();
+		} else {
+			entities = repoService().findByAllotable(allotable);
+		}
+
+		return entitiesToModels(entities);
+	}
+
+	private List<RoomModel> entitiesToModels(List<Room> entities) {
+		List<RoomModel> rooms = new ArrayList<RoomModel>();
 		for (Room room : entities) {
 			RoomModel m = toModel(room);
-			result.add(m);
+			rooms.add(m);
 		}
-		return result;
+		return rooms;
 	}
 
 	private RoomModel toModel(Room room) {
-		RoomModel m = transformer().transformTo(room);
+		RoomModel roomModel = transformer().transformTo(room);
 		for (RoomEquipment roomEquip : room.getRoomEquipments()) {
-			m.getEquipments().add(new IdValueModel(roomEquip.getEquipment().getId(), roomEquip.getQuantity()));
+			roomModel.getEquipments().add(new IdValueModel(roomEquip.getEquipment().getId(), roomEquip.getQuantity()));
 		}
-		return m;
+		roomModel.setAvailable(visitService.countOccupiedBedsOfRoom(roomModel.getId()));
+		return roomModel;
 	}
-	
+
 	private Integer evaluateQuantity(IdValueModel equipId, Equipment e) {
 		Integer quantity = 1;
 		if (null != e.getCommon() && e.getCommon()) {
@@ -103,7 +121,7 @@ public class RoomService extends AbstractServiceImpl<Integer, RoomModel, Room, R
 		}
 		return quantity;
 	}
-	
+
 	private RoomEquipment getRoomEquipment(Set<RoomEquipment> existing, Integer equipmentId) {
 		for (RoomEquipment roomEquipment : existing) {
 			if (roomEquipment.getId().getEquipment().getId() == equipmentId) {
@@ -112,22 +130,12 @@ public class RoomService extends AbstractServiceImpl<Integer, RoomModel, Room, R
 		}
 		return null;
 	}
-	
-	private boolean isRemoved(List<IdValueModel> equipments, RoomEquipment roomEquipment) {
-		boolean flag = true;
-		for (IdValueModel idValueModel : equipments) {
-			if (idValueModel.getId() == roomEquipment.getEquipment().getId()) {
-				flag = false;
-				break;
-			}
-		}
-		return flag;
-	}
 
 	public void removeRoomEquipmentById(int roomId, int equipmentId) {
 		Room fromDb = repoService().findOne(roomId);
 		if (null != fromDb.getId()) {
-			for (Iterator<RoomEquipment> roomEquipmentsIterator = fromDb.getRoomEquipments().iterator(); roomEquipmentsIterator.hasNext();) {
+			Iterator<RoomEquipment> roomEquipmentsIterator = fromDb.getRoomEquipments().iterator();
+			while (roomEquipmentsIterator.hasNext()) {
 				RoomEquipment roomEquipment = roomEquipmentsIterator.next();
 				if (equipmentId == roomEquipment.getEquipment().getId()) {
 					roomEquipmentsIterator.remove();
@@ -135,6 +143,17 @@ public class RoomService extends AbstractServiceImpl<Integer, RoomModel, Room, R
 			}
 			repoService().save(fromDb);
 		}
+	}
 
+	public List<RoomModel> getAvailableRooms() {
+		List<RoomModel> allotableRooms = getAll(true);
+		ListIterator<RoomModel> iterator = allotableRooms.listIterator();
+		while (iterator.hasNext()) {
+			RoomModel roomModel = (RoomModel) iterator.next();
+			if (roomModel.getOccupancy() - roomModel.getAvailable() <= 0) {
+				iterator.remove();
+			}
+		}
+		return allotableRooms;
 	}
 }

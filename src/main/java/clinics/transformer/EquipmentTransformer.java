@@ -9,8 +9,8 @@ import clinics.model.EquipmentModel;
 @Component
 public class EquipmentTransformer extends AbstractDTOTransformer<EquipmentModel, Equipment> {
 
-	private static final String[] FROM_EXCLUDES = new String[] {};
-	private static final String[] TO_EXCLUDES = new String[] {};
+	private static final String[] FROM_EXCLUDES = new String[] { "roomEquipments" };
+	private static final String[] TO_EXCLUDES = new String[] { "roomEquipments" };
 
 	@Override
 	public Equipment transformFrom(EquipmentModel source) {
