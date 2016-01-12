@@ -17,6 +17,10 @@ public abstract class AbstractRepositoryService<R extends BaseRepository<E, ID>,
 	public void delete(ID id) {
 		repository().delete(id);
 	}
+	
+	public void delete(E entity) {
+		repository().delete(entity);
+	}
 
 	public E save(E entity) {
 		return repository().save(entity);

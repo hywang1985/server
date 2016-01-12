@@ -73,4 +73,22 @@ public class RoomResourceImpl {
 		}
 		return new ResponseEntity<List<RoomModel>>(items, HttpStatus.OK);
 	}
+	
+	@RequestMapping(method = RequestMethod.DELETE, value = "/{roomId}/equipment/{equipmentId}")
+	public ResponseEntity<String> removeRoomEquipmentById(@PathVariable("roomId") int roomId, @PathVariable("equipmentId") int equipmentId) {
+		RoomModel item = roomService.getById(roomId);
+		HttpHeaders headers = new HttpHeaders();
+		if (null == item) {
+			headers.add("errorMessage", "Room with ID " + roomId + " Not Found");
+			return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
+		} else {
+			try {
+				roomService.removeRoomEquipmentById(roomId, equipmentId);
+				return new ResponseEntity<String>(headers, HttpStatus.OK);
+			} catch (Exception e) {
+				headers.add("errorMessage", "Room Equipment with ID " + equipmentId + " cannot be Removed");
+				return new ResponseEntity<String>(headers, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		}
+	}
 }

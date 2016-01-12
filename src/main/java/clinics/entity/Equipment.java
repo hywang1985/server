@@ -31,7 +31,7 @@ public class Equipment extends BaseEntity<Integer> {
 	private Boolean working;
 
 	public Equipment() {
-		roomEquipments = new HashSet<>();
+		roomEquipments = new HashSet<RoomEquipment>();
 	}
 
 	public Equipment(String name) {
@@ -74,7 +74,7 @@ public class Equipment extends BaseEntity<Integer> {
 		return name;
 	}
 
-	@OneToMany(mappedBy = "id.equipment", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "id.equipment", cascade = CascadeType.ALL, orphanRemoval = true)
 	public Set<RoomEquipment> getRoomEquipments() {
 		return roomEquipments;
 	}

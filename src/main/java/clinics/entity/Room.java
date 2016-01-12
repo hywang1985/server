@@ -32,7 +32,7 @@ public class Room extends BaseEntity<Integer> {
 	private Set<RoomEquipment> roomEquipments;
 
 	public Room() {
-		roomEquipments = new HashSet<>();
+		roomEquipments = new HashSet<RoomEquipment>();
 	}
 
 	public void addEquipment(Equipment e, Integer quantity) {
@@ -108,7 +108,7 @@ public class Room extends BaseEntity<Integer> {
 		return occupancy;
 	}
 
-	@OneToMany(mappedBy = "id.room", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "id.room", cascade = CascadeType.ALL, orphanRemoval = true)
 	public Set<RoomEquipment> getRoomEquipments() {
 		return roomEquipments;
 	}

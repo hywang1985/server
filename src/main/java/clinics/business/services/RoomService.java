@@ -46,8 +46,12 @@ public class RoomService extends AbstractServiceImpl<Integer, RoomModel, Room, R
 	@Override
 	public RoomModel save(RoomModel resource) {
 		Room room = transformer().transformFrom(resource);
-		Room fromDb = repoService().findOne(room.getId());
-		Set<RoomEquipment> existing = fromDb.getRoomEquipments();
+		Room fromDb = null;
+		Set<RoomEquipment> existing = null;
+		if (null != room.getId()) {
+			fromDb = repoService().findOne(room.getId());
+			existing = fromDb.getRoomEquipments();
+		}
 		List<IdValueModel> equipments = resource.getEquipments();
 
 		if (null != equipments && equipments.size() > 0) {
@@ -69,13 +73,6 @@ public class RoomService extends AbstractServiceImpl<Integer, RoomModel, Room, R
 				}
 			}
 		}
-//		for (Iterator<RoomEquipment> roomEquipmentsIterator = fromDb.getRoomEquipments().iterator(); roomEquipmentsIterator.hasNext();) {
-//			RoomEquipment roomEquipment = roomEquipmentsIterator.next();
-//			if (isRemoved(equipments, roomEquipment)) {
-//				roomEquipmentsIterator.remove();
-//			}
-//		}
-//		repoService().save(fromDb);
 		repoService().save(room);
 		return resource;
 	}
@@ -125,5 +122,19 @@ public class RoomService extends AbstractServiceImpl<Integer, RoomModel, Room, R
 			}
 		}
 		return flag;
+	}
+
+	public void removeRoomEquipmentById(int roomId, int equipmentId) {
+		Room fromDb = repoService().findOne(roomId);
+		if (null != fromDb.getId()) {
+			for (Iterator<RoomEquipment> roomEquipmentsIterator = fromDb.getRoomEquipments().iterator(); roomEquipmentsIterator.hasNext();) {
+				RoomEquipment roomEquipment = roomEquipmentsIterator.next();
+				if (equipmentId == roomEquipment.getEquipment().getId()) {
+					roomEquipmentsIterator.remove();
+				}
+			}
+			repoService().save(fromDb);
+		}
+
 	}
 }

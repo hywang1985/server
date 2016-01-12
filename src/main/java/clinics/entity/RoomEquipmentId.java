@@ -40,12 +40,12 @@ public class RoomEquipmentId implements Serializable {
 		return true;
 	}
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	public Equipment getEquipment() {
 		return equipment;
 	}
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	public Room getRoom() {
 		return room;
 	}
