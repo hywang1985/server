@@ -14,7 +14,7 @@ public class StaffModel extends PersonModel {
 
 	private List<String> specialities = new ArrayList<String>();
 
-	private List<DepartmentModel> departments = new ArrayList<DepartmentModel>();
+	private List<IdValueModel> departments = new ArrayList<IdValueModel>();
 
 	public List<String> getQualifications() {
 		return qualifications;
@@ -36,11 +36,11 @@ public class StaffModel extends PersonModel {
 		}
 	}
 
-	public List<DepartmentModel> getDepartments() {
+	public List<IdValueModel> getDepartments() {
 		return departments;
 	}
 
-	public void setDepartments(List<DepartmentModel> departments) {
+	public void setDepartments(List<IdValueModel> departments) {
 		if (departments != null && departments.size() > 0) {
 			this.departments.addAll(departments);
 		}

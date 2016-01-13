@@ -39,7 +39,8 @@ public abstract class AbstractServiceImpl<ID extends Serializable, DTO extends M
 		if (size == null || (size < 0 || size > fromSystem)) {
 			size = fromSystem;
 		}
-		return repoService().findAll(new PageRequest(page, size));
+		PageRequest pageRequest = new PageRequest(page, size);
+		return repoService().findAll(pageRequest);
 	}
 
 	protected abstract RS repoService();

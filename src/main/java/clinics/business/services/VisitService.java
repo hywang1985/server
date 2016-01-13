@@ -37,10 +37,20 @@ public class VisitService extends AbstractServiceImpl<Integer, VisitModel, Visit
 	@Override
 	public VisitModel save(VisitModel resource) {
 		Visit toSave = transformer().transformFrom(resource);
+		Visit fromDb = null;
+		Room existing = null;
+		if (null != toSave.getId()) {
+			fromDb = repoService().findOne(toSave.getId());
+			existing = fromDb.getRoom();
+		}
+
 		if (null != resource.getRoom()) {
-			Room entity = roomRepositoryService.findOne(resource.getRoom());
-			if (null != entity) {
-				toSave.setRoom(entity);
+			Room roomEntity = roomRepositoryService.findOne(resource.getRoom());
+			if (null != roomEntity) {
+				if (null != existing) {
+					toSave.setRoom(null);
+				}
+				toSave.setRoom(roomEntity);
 			}
 		}
 		repoService().save(toSave);

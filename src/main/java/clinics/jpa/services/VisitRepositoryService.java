@@ -24,6 +24,6 @@ public class VisitRepositoryService extends AbstractRepositoryService<VisitRepos
 	}
 
 	public Integer countByRoomId(Integer id) {
-		return repository().countByRoomIdAndDischargeDateIsNotNull(id);
+		return repository().countByRoomIdAndDischargeDateIsNull(id);
 	}
 }

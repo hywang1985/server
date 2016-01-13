@@ -3,11 +3,9 @@ package clinics.transformer;
 import java.util.Date;
 
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import clinics.entity.Patient;
-import clinics.jpa.services.PatientRepositoryService;
 import clinics.model.PatientModel;
 
 @Component
@@ -15,9 +13,6 @@ public class PatientTransformer extends AbstractDTOTransformer<PatientModel, Pat
 
 	private static final String[] FROM_EXCLUDES = new String[] {};
 	private static final String[] TO_EXCLUDES = new String[] {};
-
-	@Autowired
-	private PatientRepositoryService patientRepositoryService;
 
 	@Override
 	public Patient transformFrom(PatientModel source) {
