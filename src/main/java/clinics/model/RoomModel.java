@@ -20,8 +20,6 @@ public class RoomModel extends Model {
 	
 	private Integer occupancy;
 	
-	private Boolean occupied;
-	
 	private Integer available;
 
 	public Boolean getAllotable() {
@@ -44,10 +42,6 @@ public class RoomModel extends Model {
 		return occupancy;
 	}
 
-	public Boolean getOccupied() {
-		return occupied;
-	}
-
 	public void setAllotable(Boolean allotable) {
 		this.allotable = allotable;
 	}
@@ -66,10 +60,6 @@ public class RoomModel extends Model {
 
 	public void setOccupancy(Integer occupancy) {
 		this.occupancy = occupancy;
-	}
-
-	public void setOccupied(Boolean occupied) {
-		this.occupied = occupied;
 	}
 
 	public Integer getAvailable() {

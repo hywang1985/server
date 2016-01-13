@@ -29,7 +29,6 @@ public class Room extends BaseEntity<Integer> {
 	private String description;
 	private String name;
 	private Integer occupancy;
-	private Boolean occupied;
 	private Set<RoomEquipment> roomEquipments;
 
 	public Room() {
@@ -84,10 +83,6 @@ public class Room extends BaseEntity<Integer> {
 		return occupancy;
 	}
 
-	public Boolean getOccupied() {
-		return occupied;
-	}
-
 	public RoomEquipment getRoomEquipment(Integer equipmentId) {
 		for (RoomEquipment roomEquipment : getRoomEquipments()) {
 			if (roomEquipment.getId().getEquipment().getId() == equipmentId) {
@@ -140,10 +135,6 @@ public class Room extends BaseEntity<Integer> {
 
 	public void setOccupancy(Integer occupancy) {
 		this.occupancy = occupancy;
-	}
-
-	public void setOccupied(Boolean occupied) {
-		this.occupied = occupied;
 	}
 
 	public void setRoomEquipments(Set<RoomEquipment> roomEquipments) {
