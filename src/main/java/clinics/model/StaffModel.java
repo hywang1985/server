@@ -10,27 +10,29 @@ public class StaffModel extends PersonModel {
 	 */
 	private static final long serialVersionUID = 7193154699034956133L;
 
-	private List<String> qualifications = new ArrayList<String>();
+	private List<IdValueModel> qualifications = new ArrayList<IdValueModel>();
 
-	private List<String> specialities = new ArrayList<String>();
+	private List<IdValueModel> specialities = new ArrayList<IdValueModel>();
 
 	private List<IdValueModel> departments = new ArrayList<IdValueModel>();
 
-	public List<String> getQualifications() {
+	private String doj;
+
+	public List<IdValueModel> getQualifications() {
 		return qualifications;
 	}
 
-	public void setQualifications(List<String> qualifications) {
+	public void setQualifications(List<IdValueModel> qualifications) {
 		if (qualifications != null && qualifications.size() > 0) {
 			this.qualifications.addAll(qualifications);
 		}
 	}
 
-	public List<String> getSpecialities() {
+	public List<IdValueModel> getSpecialities() {
 		return specialities;
 	}
 
-	public void setSpecialities(List<String> specialities) {
+	public void setSpecialities(List<IdValueModel> specialities) {
 		if (specialities != null && specialities.size() > 0) {
 			this.specialities.addAll(specialities);
 		}
@@ -44,5 +46,13 @@ public class StaffModel extends PersonModel {
 		if (departments != null && departments.size() > 0) {
 			this.departments.addAll(departments);
 		}
+	}
+
+	public String getDoj() {
+		return doj;
+	}
+
+	public void setDoj(String doj) {
+		this.doj = doj;
 	}
 }

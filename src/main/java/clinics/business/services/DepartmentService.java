@@ -1,6 +1,5 @@
 package clinics.business.services;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -8,8 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import clinics.entity.Department;
-import clinics.entity.Room;
-import clinics.entity.RoomEquipment;
 import clinics.entity.StaffDepartment;
 import clinics.jpa.services.DepartmentRepositoryService;
 import clinics.model.DepartmentModel;

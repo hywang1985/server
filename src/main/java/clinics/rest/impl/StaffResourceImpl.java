@@ -5,9 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Context;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,16 +14,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import clinics.business.services.ConfigurationService;
 import clinics.business.services.StaffService;
-import clinics.entity.Staff;
 import clinics.model.StaffModel;
 import clinics.security.YuownTokenAuthenticationService;
-import clinics.utils.Constants;
 
 @RestController
 @RequestMapping(value = "/staffs", produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -33,9 +27,6 @@ public class StaffResourceImpl {
 
 	@Autowired
 	private StaffService staffService;
-	
-	@Autowired
-	private ConfigurationService configurationService;
 
 	@Autowired
 	private YuownTokenAuthenticationService yuownTokenAuthenticationService;
@@ -80,28 +71,15 @@ public class StaffResourceImpl {
 
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseEntity<List<StaffModel>> getAll(@RequestParam(value = "name", required = false) String name,
-			@RequestParam(value = "page", required = false) Integer page,
-			@RequestParam(value = "size", required = false) Integer size) {
+	public ResponseEntity<List<StaffModel>> getAll() {
 		HttpHeaders headers = new HttpHeaders();
-		Page<Staff> pagedItems = null;
-		List<StaffModel> items = null;
-		if (StringUtils.isNotBlank(name)) {
-			pagedItems = staffService.search(name, page, size);
-		} else {
-			pagedItems = staffService.getAllByPageNumber(page, size, configurationService.getIntPropertyFromCache(Constants.PAGE_SIZE));
-		}
-		items = staffService.entitiesToModels(pagedItems.getContent());
-
-		headers.add("pages", pagedItems.getTotalPages() + StringUtils.EMPTY);
-		headers.add("totalItems", pagedItems.getTotalElements() + StringUtils.EMPTY);
+		List<StaffModel> items = staffService.getAll();
 
 		return new ResponseEntity<List<StaffModel>>(items, headers, HttpStatus.OK);
 	}
 
 	@RequestMapping(method = RequestMethod.DELETE, value = "/{staffId}/department/{departmentId}")
-	public ResponseEntity<String> removeRoomEquipmentById(@PathVariable("staffId") int staffId,
-			@PathVariable("departmentId") int departmentId) {
+	public ResponseEntity<String> removeStaffDepartmentById(@PathVariable("staffId") int staffId, @PathVariable("departmentId") int departmentId) {
 		StaffModel item = staffService.getById(staffId);
 		HttpHeaders headers = new HttpHeaders();
 		if (null == item) {
@@ -113,6 +91,42 @@ public class StaffResourceImpl {
 				return new ResponseEntity<String>(headers, HttpStatus.OK);
 			} catch (Exception e) {
 				headers.add("errorMessage", "Staff Department with ID " + departmentId + " cannot be Removed");
+				return new ResponseEntity<String>(headers, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		}
+	}
+	
+	@RequestMapping(method = RequestMethod.DELETE, value = "/{staffId}/qualification/{qualificationId}")
+	public ResponseEntity<String> removeStaffQualificationById(@PathVariable("staffId") int staffId, @PathVariable("qualificationId") int qualificationId) {
+		StaffModel item = staffService.getById(staffId);
+		HttpHeaders headers = new HttpHeaders();
+		if (null == item) {
+			headers.add("errorMessage", "Staff with ID " + staffId + " Not Found");
+			return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
+		} else {
+			try {
+				staffService.removeStaffQualificationById(staffId, qualificationId);
+				return new ResponseEntity<String>(headers, HttpStatus.OK);
+			} catch (Exception e) {
+				headers.add("errorMessage", "Staff Qualification with ID " + qualificationId + " cannot be Removed");
+				return new ResponseEntity<String>(headers, HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		}
+	}
+	
+	@RequestMapping(method = RequestMethod.DELETE, value = "/{staffId}/speciality/{specialityId}")
+	public ResponseEntity<String> removeStaffSpecialityById(@PathVariable("staffId") int staffId, @PathVariable("specialityId") int specialityId) {
+		StaffModel item = staffService.getById(staffId);
+		HttpHeaders headers = new HttpHeaders();
+		if (null == item) {
+			headers.add("errorMessage", "Staff with ID " + staffId + " Not Found");
+			return new ResponseEntity<String>(headers, HttpStatus.NOT_FOUND);
+		} else {
+			try {
+				staffService.removeStaffSpecialityById(staffId, specialityId);
+				return new ResponseEntity<String>(headers, HttpStatus.OK);
+			} catch (Exception e) {
+				headers.add("errorMessage", "Staff Speciality with ID " + specialityId + " cannot be Removed");
 				return new ResponseEntity<String>(headers, HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		}

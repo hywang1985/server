@@ -16,22 +16,22 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name = "department", uniqueConstraints = @UniqueConstraint(columnNames = { "id" }) )
+@Table(name = "qualification", uniqueConstraints = @UniqueConstraint(columnNames = { "id" }) )
 @AttributeOverrides(value = {
 		@AttributeOverride(name = "id", column = @Column(name = "ID", insertable = false, updatable = false) ),
 		@AttributeOverride(name = "name", column = @Column(name = "name") ),
 		@AttributeOverride(name = "description", column = @Column(name = "description") )
 })
-public class Department extends BaseEntity<Integer> {
+public class Qualification extends BaseEntity<Integer> {
 	private String description;
 	private String name;
-	private Set<StaffDepartment> staffDepartments;
+	private Set<StaffQualification> staffQualifications;
 
-	public Department() {
-		staffDepartments = new HashSet<StaffDepartment>();
+	public Qualification() {
+		staffQualifications = new HashSet<StaffQualification>();
 	}
 
-	public Department(String name) {
+	public Qualification(String name) {
 		this.name = name;
 	}
 
@@ -43,7 +43,7 @@ public class Department extends BaseEntity<Integer> {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Department other = (Department) obj;
+		Qualification other = (Qualification) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -67,9 +67,9 @@ public class Department extends BaseEntity<Integer> {
 		return name;
 	}
 
-	@OneToMany(mappedBy = "id.department", cascade = CascadeType.ALL, orphanRemoval = true)
-	public Set<StaffDepartment> getStaffDepartments() {
-		return staffDepartments;
+	@OneToMany(mappedBy = "id.qualification", cascade = CascadeType.ALL, orphanRemoval = true)
+	public Set<StaffQualification> getStaffQualifications() {
+		return staffQualifications;
 	}
 
 	@Override
@@ -93,8 +93,7 @@ public class Department extends BaseEntity<Integer> {
 		this.name = name;
 	}
 
-	public void setStaffDepartments(Set<StaffDepartment> staffDepartments) {
-		this.staffDepartments = staffDepartments;
+	public void setStaffQualifications(Set<StaffQualification> staffQualifications) {
+		this.staffQualifications = staffQualifications;
 	}
-
 }

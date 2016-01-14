@@ -25,23 +25,23 @@ import clinics.enums.Gender;
 import clinics.enums.Prefix;
 
 @Entity
-@Table(name = "staffs", uniqueConstraints = @UniqueConstraint(columnNames = { "id" }))
+@Table(name = "staffs", uniqueConstraints = @UniqueConstraint(columnNames = { "id" }) )
 @AttributeOverrides(value = {
-        @AttributeOverride(name = "id", column = @Column(name = "id", insertable = false, updatable = false)),
-        @AttributeOverride(name = "firstName", column = @Column(name = "firstName")),
-        @AttributeOverride(name = "lastName", column = @Column(name = "lastName")),
-        @AttributeOverride(name = "mobile", column = @Column(name = "mobile")),
-        @AttributeOverride(name = "address", column = @Column(name = "address")),
-        @AttributeOverride(name = "dob", column = @Column(name = "dob")),
-        @AttributeOverride(name = "doj", column = @Column(name = "doj")),
-        @AttributeOverride(name = "age", column = @Column(name = "age")),
-        @AttributeOverride(name = "gender", column = @Column(name = "gender")),
-        @AttributeOverride(name = "prefix", column = @Column(name = "prefix")),
-        @AttributeOverride(name = "bloodGroup", column = @Column(name = "bloodgroup")),
-        @AttributeOverride(name = "createdDate", column = @Column(name = "create_date")),
-        @AttributeOverride(name = "modifiedDate", column = @Column(name = "update_date")),
-        @AttributeOverride(name = "createdBy", column = @Column(name = "user_entered")),
-        @AttributeOverride(name = "modifiedBy", column = @Column(name = "user_updated"))
+		@AttributeOverride(name = "id", column = @Column(name = "id", insertable = false, updatable = false) ),
+		@AttributeOverride(name = "firstName", column = @Column(name = "firstName") ),
+		@AttributeOverride(name = "lastName", column = @Column(name = "lastName") ),
+		@AttributeOverride(name = "mobile", column = @Column(name = "mobile") ),
+		@AttributeOverride(name = "address", column = @Column(name = "address") ),
+		@AttributeOverride(name = "dob", column = @Column(name = "dob") ),
+		@AttributeOverride(name = "doj", column = @Column(name = "doj") ),
+		@AttributeOverride(name = "age", column = @Column(name = "age") ),
+		@AttributeOverride(name = "gender", column = @Column(name = "gender") ),
+		@AttributeOverride(name = "prefix", column = @Column(name = "prefix") ),
+		@AttributeOverride(name = "bloodGroup", column = @Column(name = "bloodgroup") ),
+		@AttributeOverride(name = "createdDate", column = @Column(name = "create_date") ),
+		@AttributeOverride(name = "modifiedDate", column = @Column(name = "update_date") ),
+		@AttributeOverride(name = "createdBy", column = @Column(name = "user_entered") ),
+		@AttributeOverride(name = "modifiedBy", column = @Column(name = "user_updated") )
 })
 public class Staff extends BaseEntity<Integer> implements Serializable {
 
@@ -56,7 +56,7 @@ public class Staff extends BaseEntity<Integer> implements Serializable {
 	private String address;
 
 	private String dob;
-	
+
 	private String doj;
 
 	private byte age;
@@ -74,18 +74,53 @@ public class Staff extends BaseEntity<Integer> implements Serializable {
 	private int createdBy;
 
 	private int modifiedBy;
-	
+
 	private Set<StaffDepartment> staffDepartments;
-	
+
+	private Set<StaffQualification> staffQualifications;
+
+	private Set<StaffSpeciality> staffSpecialities;
+
 	public Staff() {
 		staffDepartments = new HashSet<StaffDepartment>();
+		staffQualifications = new HashSet<StaffQualification>();
+		staffSpecialities = new HashSet<StaffSpeciality>();
 	}
-	
+
 	public void addDepartment(Department department) {
 		StaffDepartment staffDepartment = new StaffDepartment();
 		staffDepartment.setStaff(this);
 		staffDepartment.setDepartment(department);
 		staffDepartments.add(staffDepartment);
+	}
+
+	public void updateDepartment(StaffDepartment curr) {
+		curr.setStaff(this);
+		staffDepartments.add(curr);
+	}
+
+	public void addSpeciality(Speciality speciality) {
+		StaffSpeciality staffSpeciality = new StaffSpeciality();
+		staffSpeciality.setStaff(this);
+		staffSpeciality.setSpeciality(speciality);
+		staffSpecialities.add(staffSpeciality);
+	}
+
+	public void updateSpeciality(StaffSpeciality curr) {
+		curr.setStaff(this);
+		staffSpecialities.add(curr);
+	}
+
+	public void addQualification(Qualification qualification) {
+		StaffQualification staffQualification = new StaffQualification();
+		staffQualification.setStaff(this);
+		staffQualification.setQualification(qualification);
+		staffQualifications.add(staffQualification);
+	}
+
+	public void updateQualification(StaffQualification curr) {
+		curr.setStaff(this);
+		staffQualifications.add(curr);
 	}
 
 	public String getFirstName() {
@@ -243,8 +278,21 @@ public class Staff extends BaseEntity<Integer> implements Serializable {
 		this.staffDepartments = staffDepartments;
 	}
 
-	public void updateDepartment(StaffDepartment curr) {
-		curr.setStaff(this);
-		staffDepartments.add(curr);
+	@OneToMany(mappedBy = "id.staff", cascade = CascadeType.ALL, orphanRemoval = true)
+	public Set<StaffSpeciality> getStaffSpecialities() {
+		return staffSpecialities;
+	}
+
+	public void setStaffSpecialities(Set<StaffSpeciality> staffSpecialities) {
+		this.staffSpecialities = staffSpecialities;
+	}
+
+	@OneToMany(mappedBy = "id.staff", cascade = CascadeType.ALL, orphanRemoval = true)
+	public Set<StaffQualification> getStaffQualifications() {
+		return staffQualifications;
+	}
+
+	public void setStaffQualifications(Set<StaffQualification> staffQualifications) {
+		this.staffQualifications = staffQualifications;
 	}
 }

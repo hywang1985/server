@@ -3,8 +3,6 @@ package clinics.jpa.services;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import clinics.entity.Staff;
@@ -41,10 +39,6 @@ public class StaffRepositoryService extends AbstractRepositoryService<StaffsRepo
 	@Override
 	public Staff save(Staff entity) {
 		return super.save(entity);
-	}
-
-	public Page<Staff> findAllByNameLike(String name, Pageable pageRequest) {
-		return repository().findAllByFirstNameLikeOrLastNameLike(PERCENT + name + PERCENT, PERCENT + name + PERCENT, pageRequest);
 	}
 
 	public Staff findById(Integer id) {
