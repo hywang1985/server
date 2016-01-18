@@ -10,6 +10,10 @@ public class DepartmentModel extends Model {
 	private String name;
 
 	private String description;
+	
+	private Integer chief;
+	
+	private Boolean appointmentable;
 
 	public String getName() {
 		return name;
@@ -25,5 +29,21 @@ public class DepartmentModel extends Model {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public Integer getChief() {
+		return chief;
+	}
+
+	public void setChief(Integer chief) {
+		this.chief = chief;
+	}
+
+	public Boolean getAppointmentable() {
+		return appointmentable;
+	}
+
+	public void setAppointmentable(Boolean appointmentable) {
+		this.appointmentable = appointmentable;
 	}
 }

@@ -1,31 +1,65 @@
 package clinics.model;
 
-import java.util.Date;
 
-public class AppointmentModel extends PersonModel {
+public class AppointmentModel extends Model {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 5257830650224317268L;
 
-	private Date date;
+	private String dateTime;
+	private Integer department;
+	private Integer doctor;
+	private String name;
+	private Integer patient;
+	private String reason;
 
-	private Date time;
-
-	public Date getDate() {
-		return date;
+	public String getDateTime() {
+		return dateTime;
 	}
 
-	public void setDate(Date date) {
-		this.date = date;
+	public Integer getDepartment() {
+		return department;
 	}
 
-	public Date getTime() {
-		return time;
+	public Integer getDoctor() {
+		return doctor;
 	}
 
-	public void setTime(Date time) {
-		this.time = time;
+	public String getName() {
+		return name;
+	}
+
+	public Integer getPatient() {
+		return patient;
+	}
+
+	public String getReason() {
+		return reason;
+	}
+
+	public void setDateTime(String dateTime) {
+		this.dateTime = dateTime;
+	}
+
+	public void setDepartment(Integer department) {
+		this.department = department;
+	}
+
+	public void setDoctor(Integer doctor) {
+		this.doctor = doctor;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setPatient(Integer patient) {
+		this.patient = patient;
+	}
+
+	public void setReason(String reason) {
+		this.reason = reason;
 	}
 }

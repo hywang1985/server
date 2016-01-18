@@ -68,6 +68,13 @@ public class Patient extends BaseEntity<Integer> implements Serializable {
 
 	private int modifiedBy;
 
+	public Patient() {
+	}
+
+	public Patient(Integer id) {
+		this.id = id;
+	}
+
 	public String getFirstName() {
 		return firstName;
 	}

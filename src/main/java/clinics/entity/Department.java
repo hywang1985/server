@@ -25,14 +25,15 @@ import javax.persistence.UniqueConstraint;
 public class Department extends BaseEntity<Integer> {
 	private String description;
 	private String name;
+	private Boolean appointmentable;
 	private Set<StaffDepartment> staffDepartments;
 
 	public Department() {
 		staffDepartments = new HashSet<StaffDepartment>();
 	}
 
-	public Department(String name) {
-		this.name = name;
+	public Department(Integer id) {
+		this.id = id;
 	}
 
 	@Override
@@ -95,6 +96,14 @@ public class Department extends BaseEntity<Integer> {
 
 	public void setStaffDepartments(Set<StaffDepartment> staffDepartments) {
 		this.staffDepartments = staffDepartments;
+	}
+
+	public Boolean getAppointmentable() {
+		return appointmentable;
+	}
+
+	public void setAppointmentable(Boolean appointmentable) {
+		this.appointmentable = appointmentable;
 	}
 
 }

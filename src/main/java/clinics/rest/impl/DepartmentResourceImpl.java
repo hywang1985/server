@@ -2,7 +2,6 @@ package clinics.rest.impl;
 
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -12,12 +11,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import clinics.business.services.DepartmentService;
 import clinics.model.DepartmentModel;
+import clinics.model.StaffModel;
 
 @RestController
 @RequestMapping(value = "/departments", produces = { MediaType.APPLICATION_JSON_VALUE })
@@ -64,13 +63,33 @@ public class DepartmentResourceImpl {
 
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseEntity<List<DepartmentModel>> getAll(@RequestParam(value = "name", required = false) String name) {
-		List<DepartmentModel> items = null;
-		if (StringUtils.isNotBlank(name)) {
-			items = departmentService.getByName(name);
-		} else {
-			items = departmentService.getAll();
-		}
+	public ResponseEntity<List<DepartmentModel>> getAll() {
+		List<DepartmentModel> items = departmentService.getAll();
+		return new ResponseEntity<List<DepartmentModel>>(items, HttpStatus.OK);
+	}
+
+	@RequestMapping(method = RequestMethod.GET, path = "/{deptId}/staff")
+	@ResponseBody
+	public ResponseEntity<List<StaffModel>> getDepartmentStaff(@PathVariable(value = "deptId") Integer deptId) {
+		HttpHeaders headers = new HttpHeaders();
+		List<StaffModel> items = departmentService.getDeptStaff(deptId);
+
+		return new ResponseEntity<List<StaffModel>>(items, headers, HttpStatus.OK);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, path = "/{deptId}/availableStaff/{day}")
+	@ResponseBody
+	public ResponseEntity<List<StaffModel>> getDepartmentStaffForDay(@PathVariable(value = "deptId") Integer deptId, @PathVariable(value = "day") Integer day) {
+		HttpHeaders headers = new HttpHeaders();
+		List<StaffModel> items = departmentService.getDeptStaffByDay(deptId, day);
+
+		return new ResponseEntity<List<StaffModel>>(items, headers, HttpStatus.OK);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, path = "/appointmentable")
+	@ResponseBody
+	public ResponseEntity<List<DepartmentModel>> getAllAppointmentable() {
+		List<DepartmentModel> items = departmentService.getAllAppointmentable();
 		return new ResponseEntity<List<DepartmentModel>>(items, HttpStatus.OK);
 	}
 }

@@ -1,5 +1,6 @@
 package clinics.business.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -7,10 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import clinics.entity.Department;
+import clinics.entity.Staff;
 import clinics.entity.StaffDepartment;
+import clinics.enums.Days;
 import clinics.jpa.services.DepartmentRepositoryService;
 import clinics.model.DepartmentModel;
+import clinics.model.StaffModel;
 import clinics.transformer.DepartmentTransformer;
+import clinics.transformer.StaffTransformer;
 
 @Service
 public class DepartmentService extends AbstractServiceImpl<Integer, DepartmentModel, Department, DepartmentRepositoryService, DepartmentTransformer> {
@@ -20,6 +25,9 @@ public class DepartmentService extends AbstractServiceImpl<Integer, DepartmentMo
 
 	@Autowired
 	private DepartmentTransformer departmentTransformer;
+
+	@Autowired
+	private StaffTransformer staffTransformer;
 
 	@Override
 	protected DepartmentRepositoryService repoService() {
@@ -41,6 +49,15 @@ public class DepartmentService extends AbstractServiceImpl<Integer, DepartmentMo
 		if (null != equipment.getId()) {
 			Department fromDb = repoService().findOne(equipment.getId());
 			Set<StaffDepartment> existing = fromDb.getStaffDepartments();
+			if (null != resource.getChief()) {
+				for (StaffDepartment staffDepartment : existing) {
+					if (staffDepartment.getStaff().getId() == resource.getChief()) {
+						staffDepartment.setChief(true);
+					} else {
+						staffDepartment.setChief(false);
+					}
+				}
+			}
 			equipment.getStaffDepartments().addAll(existing);
 		}
 		repoService().save(equipment);
@@ -48,6 +65,85 @@ public class DepartmentService extends AbstractServiceImpl<Integer, DepartmentMo
 	}
 
 	public List<DepartmentModel> getAll() {
-		return super.getAll();
+		List<Department> all = repoService().findAll();
+		return getDepartmentWithStaff(all);
+	}
+
+	public List<StaffModel> getDeptStaff(Integer deptId) {
+		List<StaffModel> staffs = new ArrayList<StaffModel>();
+		Department department = repoService().findOne(deptId);
+		if (null != department) {
+			Set<StaffDepartment> l = department.getStaffDepartments();
+			for (StaffDepartment staffDepartment : l) {
+				StaffModel staff = staffTransformer.transformTo(staffDepartment.getStaff());
+				staffs.add(staff);
+			}
+		}
+		return staffs;
+	}
+
+	public List<StaffModel> getDeptStaffByDay(Integer deptId, Integer day) {
+		List<StaffModel> staffs = new ArrayList<StaffModel>();
+		Department department = repoService().findOne(deptId);
+		if (null != department) {
+			Set<StaffDepartment> l = department.getStaffDepartments();
+			for (StaffDepartment staffDepartment : l) {
+				if (canGo(staffDepartment.getStaff(), day)) {
+					StaffModel staff = staffTransformer.transformTo(staffDepartment.getStaff());
+					staffs.add(staff);
+				}
+			}
+		}
+		return staffs;
+	}
+
+	private boolean canGo(Staff staff, Integer day) {
+		boolean flag = false;
+		Days d = Days.values()[day];
+		switch (d) {
+		case MONDAY:
+			flag = staff.getMon();
+			break;
+		case TUESDAY:
+			flag = staff.getTue();
+			break;
+		case WEDNSDAY:
+			flag = staff.getWed();
+			break;
+		case THURSDAY:
+			flag = staff.getThu();
+			break;
+		case FRIDAY:
+			flag = staff.getFri();
+			break;
+		case SATURDAY:
+			flag = staff.getSat();
+			break;
+		case SUNDAY:
+			flag = staff.getSun();
+			break;
+		}
+		return flag;
+	}
+
+	public List<DepartmentModel> getAllAppointmentable() {
+		List<Department> all = repoService().findAllAppointmentable(true);
+		return getDepartmentWithStaff(all);
+	}
+
+	private List<DepartmentModel> getDepartmentWithStaff(List<Department> all) {
+		List<DepartmentModel> allDepts = new ArrayList<DepartmentModel>();
+		for (Department department : all) {
+			DepartmentModel transformTo = departmentTransformer.transformTo(department);
+			Set<StaffDepartment> staffDepts = department.getStaffDepartments();
+			for (StaffDepartment staffDepartment : staffDepts) {
+				if (null != staffDepartment.getChief() && staffDepartment.getChief()) {
+					transformTo.setChief(staffDepartment.getStaff().getId());
+					break;
+				}
+			}
+			allDepts.add(transformTo);
+		}
+		return allDepts;
 	}
 }

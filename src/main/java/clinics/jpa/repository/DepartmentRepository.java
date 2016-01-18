@@ -12,4 +12,6 @@ public interface DepartmentRepository extends BaseRepository<Department, Integer
 	public Department findByName(String name);
 
 	public List<Department> findAllByNameLike(String name);
+
+	public List<Department> findAllByAppointmentable(boolean b);
 }

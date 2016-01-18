@@ -41,7 +41,14 @@ import clinics.enums.Prefix;
 		@AttributeOverride(name = "createdDate", column = @Column(name = "create_date") ),
 		@AttributeOverride(name = "modifiedDate", column = @Column(name = "update_date") ),
 		@AttributeOverride(name = "createdBy", column = @Column(name = "user_entered") ),
-		@AttributeOverride(name = "modifiedBy", column = @Column(name = "user_updated") )
+		@AttributeOverride(name = "modifiedBy", column = @Column(name = "user_updated") ),
+		@AttributeOverride(name = "sun", column = @Column(name = "sun") ),
+		@AttributeOverride(name = "mon", column = @Column(name = "mon") ),
+		@AttributeOverride(name = "tue", column = @Column(name = "tue") ),
+		@AttributeOverride(name = "wed", column = @Column(name = "wed") ),
+		@AttributeOverride(name = "thu", column = @Column(name = "thu") ),
+		@AttributeOverride(name = "fri", column = @Column(name = "fri") ),
+		@AttributeOverride(name = "sat", column = @Column(name = "sat") )
 })
 public class Staff extends BaseEntity<Integer> implements Serializable {
 
@@ -74,6 +81,20 @@ public class Staff extends BaseEntity<Integer> implements Serializable {
 	private int createdBy;
 
 	private int modifiedBy;
+	
+	private Boolean sun;
+	
+	private Boolean mon;
+	
+	private Boolean tue;
+	
+	private Boolean wed;
+	
+	private Boolean thu;
+	
+	private Boolean fri;
+	
+	private Boolean sat;
 
 	private Set<StaffDepartment> staffDepartments;
 
@@ -85,6 +106,11 @@ public class Staff extends BaseEntity<Integer> implements Serializable {
 		staffDepartments = new HashSet<StaffDepartment>();
 		staffQualifications = new HashSet<StaffQualification>();
 		staffSpecialities = new HashSet<StaffSpeciality>();
+	}
+
+	public Staff(Integer id) {
+		this();
+		this.id = id;
 	}
 
 	public void addDepartment(Department department) {
@@ -294,5 +320,61 @@ public class Staff extends BaseEntity<Integer> implements Serializable {
 
 	public void setStaffQualifications(Set<StaffQualification> staffQualifications) {
 		this.staffQualifications = staffQualifications;
+	}
+
+	public Boolean getSun() {
+		return sun;
+	}
+
+	public Boolean getMon() {
+		return mon;
+	}
+
+	public Boolean getTue() {
+		return tue;
+	}
+
+	public Boolean getWed() {
+		return wed;
+	}
+
+	public Boolean getThu() {
+		return thu;
+	}
+
+	public Boolean getFri() {
+		return fri;
+	}
+
+	public Boolean getSat() {
+		return sat;
+	}
+
+	public void setSun(Boolean sun) {
+		this.sun = sun;
+	}
+
+	public void setMon(Boolean mon) {
+		this.mon = mon;
+	}
+
+	public void setTue(Boolean tue) {
+		this.tue = tue;
+	}
+
+	public void setWed(Boolean wed) {
+		this.wed = wed;
+	}
+
+	public void setThu(Boolean thu) {
+		this.thu = thu;
+	}
+
+	public void setFri(Boolean fri) {
+		this.fri = fri;
+	}
+
+	public void setSat(Boolean sat) {
+		this.sat = sat;
 	}
 }

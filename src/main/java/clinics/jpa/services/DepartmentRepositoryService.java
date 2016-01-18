@@ -23,4 +23,8 @@ public class DepartmentRepositoryService extends AbstractRepositoryService<Depar
 	public List<Department> findByName(String name) {
 		return repository().findAllByNameLike(Constants.PERCENT + name.toUpperCase() + Constants.PERCENT);
 	}
+
+	public List<Department> findAllAppointmentable(boolean b) {
+		return repository().findAllByAppointmentable(b);
+	}
 }
