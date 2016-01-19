@@ -14,6 +14,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -48,7 +49,7 @@ import clinics.enums.Prefix;
 		@AttributeOverride(name = "wed", column = @Column(name = "wed") ),
 		@AttributeOverride(name = "thu", column = @Column(name = "thu") ),
 		@AttributeOverride(name = "fri", column = @Column(name = "fri") ),
-		@AttributeOverride(name = "sat", column = @Column(name = "sat") )
+		@AttributeOverride(name = "sat", column = @Column(name = "sat") ),
 })
 public class Staff extends BaseEntity<Integer> implements Serializable {
 
@@ -101,6 +102,8 @@ public class Staff extends BaseEntity<Integer> implements Serializable {
 	private Set<StaffQualification> staffQualifications;
 
 	private Set<StaffSpeciality> staffSpecialities;
+	
+	private User user;
 
 	public Staff() {
 		staffDepartments = new HashSet<StaffDepartment>();
@@ -376,5 +379,14 @@ public class Staff extends BaseEntity<Integer> implements Serializable {
 
 	public void setSat(Boolean sat) {
 		this.sat = sat;
+	}
+
+	@OneToOne(optional = true, cascade = CascadeType.ALL)
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 }

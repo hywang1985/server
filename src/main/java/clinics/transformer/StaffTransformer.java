@@ -4,16 +4,21 @@ import java.util.Date;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import clinics.entity.Staff;
+import clinics.jpa.services.UserRepositoryService;
 import clinics.model.StaffModel;
 
 @Component
 public class StaffTransformer extends AbstractDTOTransformer<StaffModel, Staff> {
 
-	private static final String[] FROM_EXCLUDES = new String[] { "staffDepartments" };
-	private static final String[] TO_EXCLUDES = new String[] { "staffDepartments" };
+	private static final String[] FROM_EXCLUDES = new String[] { "staffDepartments", "user" };
+	private static final String[] TO_EXCLUDES = new String[] { "staffDepartments", "user" };
+
+	@Autowired
+	private UserRepositoryService userRepositoryService;
 
 	@Override
 	public Staff transformFrom(StaffModel source) {
@@ -33,6 +38,10 @@ public class StaffTransformer extends AbstractDTOTransformer<StaffModel, Staff> 
 				if (StringUtils.isNotBlank(source.getLastName())) {
 					dest.setLastName(source.getLastName());
 				}
+				if (null != source.getUser()) {
+					dest.setUser(userRepositoryService.findOne(source.getUser()));
+					dest.getUser().setStaff(dest);
+				}
 			} catch (Exception e) {
 				dest = null;
 			}
@@ -47,6 +56,9 @@ public class StaffTransformer extends AbstractDTOTransformer<StaffModel, Staff> 
 			try {
 				dest = new StaffModel();
 				BeanUtils.copyProperties(source, dest, TO_EXCLUDES);
+				if (null != source.getUser()) {
+					dest.setUser(source.getUser().getId());
+				}
 			} catch (Exception e) {
 				dest = null;
 			}

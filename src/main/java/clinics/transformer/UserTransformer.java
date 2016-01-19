@@ -5,18 +5,23 @@ import java.util.Collection;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import clinics.entity.User;
+import clinics.jpa.services.StaffRepositoryService;
 import clinics.model.UserModel;
 import clinics.security.YuownGrantedAuthority;
 
 @Component
 public class UserTransformer extends AbstractDTOTransformer<UserModel, User> {
 
-	private static final String[] FROM_EXCLUDES = new String[] {"authorities"};
-	private static final String[] TO_EXCLUDES = new String[] {"authorities"};
+	private static final String[] FROM_EXCLUDES = new String[] { "authorities" };
+	private static final String[] TO_EXCLUDES = new String[] { "authorities" };
+
+	@Autowired
+	private StaffRepositoryService staffRepositoryService;
 
 	@Override
 	public User transformFrom(UserModel source) {
@@ -26,6 +31,10 @@ public class UserTransformer extends AbstractDTOTransformer<UserModel, User> {
 				dest = new User();
 				BeanUtils.copyProperties(source, dest, FROM_EXCLUDES);
 				dest.setFullName(source.getFullName().toUpperCase());
+				if (null != source.getStaff()) {
+					dest.setStaff(staffRepositoryService.findOne(source.getStaff()));
+					dest.getStaff().setUser(dest);
+				}
 			} catch (Exception e) {
 				dest = null;
 			}
@@ -40,6 +49,9 @@ public class UserTransformer extends AbstractDTOTransformer<UserModel, User> {
 			try {
 				dest = new UserModel();
 				BeanUtils.copyProperties(source, dest, TO_EXCLUDES);
+				if (null != source.getStaff()) {
+					dest.setStaff(source.getStaff().getId());
+				}
 			} catch (Exception e) {
 				dest = null;
 			}
@@ -58,9 +70,7 @@ public class UserTransformer extends AbstractDTOTransformer<UserModel, User> {
 
 	public org.springframework.security.core.userdetails.User transformToSecurityUser(UserModel userFromClient) {
 		org.springframework.security.core.userdetails.User dest = new org.springframework.security.core.userdetails.User(
-				userFromClient.getUsername(),
-				userFromClient.getPassword(),
-				userFromClient.getAuthorities());
+				userFromClient.getUsername(), userFromClient.getPassword(), userFromClient.getAuthorities());
 		return dest;
 	}
 
@@ -71,7 +81,7 @@ public class UserTransformer extends AbstractDTOTransformer<UserModel, User> {
 		}
 		return authorities;
 	}
-	
+
 	public ArrayList<YuownGrantedAuthority> transformAdminAuthorities(List<String> adminAuthorities) {
 		ArrayList<YuownGrantedAuthority> authorities = new ArrayList<YuownGrantedAuthority>();
 		for (String adminAuthority : adminAuthorities) {

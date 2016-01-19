@@ -2,6 +2,7 @@ package clinics.rest.impl;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -64,6 +65,19 @@ public class AppointmentResourceImpl {
 	@ResponseBody
 	public ResponseEntity<List<AppointmentModel>> getAll() {
 		List<AppointmentModel> items = appointmentService.getAll();
+		return new ResponseEntity<List<AppointmentModel>>(items, HttpStatus.OK);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, path = "/staff/{staffId}/{date}")
+	@ResponseBody
+	public ResponseEntity<List<AppointmentModel>> getStaffAppointments(@PathVariable("staffId") Integer staffId, @PathVariable("date") String date) {
+		StringBuilder sb = new StringBuilder();
+		if (StringUtils.isNotBlank(date) && date.length() == 8) {
+			sb.append(date);
+			sb.insert(6, "-");
+			sb.insert(4, "-");
+		}
+		List<AppointmentModel> items = appointmentService.getStaffAppointments(staffId, sb.toString());
 		return new ResponseEntity<List<AppointmentModel>>(items, HttpStatus.OK);
 	}
 }

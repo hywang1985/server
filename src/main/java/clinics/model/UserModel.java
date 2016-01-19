@@ -19,6 +19,8 @@ public class UserModel extends Model {
 	private String fullName;
 
 	private long expires;
+	
+	private Integer staff;
 
 	private ArrayList<YuownGrantedAuthority> authorities;
 
@@ -83,5 +85,13 @@ public class UserModel extends Model {
 
 	public ArrayList<YuownGrantedAuthority> getAuthorities() {
 		return authorities;
+	}
+
+	public Integer getStaff() {
+		return staff;
+	}
+
+	public void setStaff(Integer staff) {
+		this.staff = staff;
 	}
 }

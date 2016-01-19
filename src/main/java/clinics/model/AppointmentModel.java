@@ -14,6 +14,7 @@ public class AppointmentModel extends Model {
 	private String name;
 	private Integer patient;
 	private String reason;
+	private Boolean done;
 
 	public String getDateTime() {
 		return dateTime;
@@ -61,5 +62,13 @@ public class AppointmentModel extends Model {
 
 	public void setReason(String reason) {
 		this.reason = reason;
+	}
+
+	public Boolean getDone() {
+		return done;
+	}
+
+	public void setDone(Boolean done) {
+		this.done = done;
 	}
 }

@@ -1,12 +1,15 @@
 package clinics.business.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import clinics.entity.Appointment;
+import clinics.entity.Staff;
 import clinics.jpa.services.AppointmentRepositoryService;
+import clinics.jpa.services.StaffRepositoryService;
 import clinics.model.AppointmentModel;
 import clinics.transformer.AppointmentTransformer;
 
@@ -18,6 +21,9 @@ public class AppointmentService extends AbstractServiceImpl<Integer, Appointment
 
 	@Autowired
 	private AppointmentTransformer appointmentTransformer;
+
+	@Autowired
+	private StaffRepositoryService staffRepositoryService;
 
 	@Override
 	protected AppointmentRepositoryService repoService() {
@@ -36,5 +42,13 @@ public class AppointmentService extends AbstractServiceImpl<Integer, Appointment
 
 	public List<AppointmentModel> getAll() {
 		return super.getAll();
+	}
+
+	public List<AppointmentModel> getStaffAppointments(Integer staffId, String date) {
+		Staff staff = staffRepositoryService.findById(staffId);
+		if (null != staff) {
+			return transformer().transformTo(repoService().getStaffAppointments(staff, date));
+		}
+		return new ArrayList<AppointmentModel>();
 	}
 }

@@ -4,9 +4,11 @@ import java.io.Serializable;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -34,6 +36,8 @@ public class User extends BaseEntity<Integer> implements Serializable {
 	private boolean enabled;
 
 	private String fullName;
+	
+	private Staff staff;
 
 	public String getUsername() {
 		return username;
@@ -98,5 +102,14 @@ public class User extends BaseEntity<Integer> implements Serializable {
 			return false;
 		User rhs = (User) obj;
 		return (new EqualsBuilder()).append(this.id, rhs.id).isEquals();
+	}
+
+	@OneToOne(optional = true, cascade = CascadeType.ALL)
+	public Staff getStaff() {
+		return staff;
+	}
+
+	public void setStaff(Staff staff) {
+		this.staff = staff;
 	}
 }

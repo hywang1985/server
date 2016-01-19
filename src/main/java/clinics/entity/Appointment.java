@@ -71,7 +71,7 @@ public class Appointment extends BaseEntity<Integer> {
 		return name;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER, optional = false, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER, optional = true, cascade = CascadeType.ALL)
 	public Patient getPatient() {
 		return patient;
 	}

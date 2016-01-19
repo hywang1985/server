@@ -102,25 +102,25 @@ public class DepartmentService extends AbstractServiceImpl<Integer, DepartmentMo
 		Days d = Days.values()[day];
 		switch (d) {
 		case MONDAY:
-			flag = staff.getMon();
+			flag = staff.getMon() != null ? staff.getMon() : false;
 			break;
 		case TUESDAY:
-			flag = staff.getTue();
+			flag = staff.getTue() != null ? staff.getTue() : false;
 			break;
 		case WEDNSDAY:
-			flag = staff.getWed();
+			flag = staff.getWed() != null ? staff.getWed() : false;
 			break;
 		case THURSDAY:
-			flag = staff.getThu();
+			flag = staff.getThu() != null ? staff.getThu() : false;
 			break;
 		case FRIDAY:
-			flag = staff.getFri();
+			flag = staff.getFri() != null ? staff.getFri() : false;
 			break;
 		case SATURDAY:
-			flag = staff.getSat();
+			flag = staff.getSat() != null ? staff.getSat() : false;
 			break;
 		case SUNDAY:
-			flag = staff.getSun();
+			flag = staff.getSun() != null ? staff.getSun() : false;
 			break;
 		}
 		return flag;

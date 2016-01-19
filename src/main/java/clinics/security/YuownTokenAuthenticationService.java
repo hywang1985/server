@@ -42,6 +42,9 @@ public class YuownTokenAuthenticationService {
 		if (StringUtils.isNotBlank(encryptedToken)) {
 			response.addHeader(AUTH_HEADER_NAME, encryptedToken);
 			response.addHeader("USER_FULLNAME", user.getFullName());
+			if(null != user.getStaff()) {
+				response.addHeader("USER_STAFF", user.getStaff().toString());
+			}
 			try {
 				response.addHeader("USER_ROLES", objectMapper.writeValueAsString(user.getAuthorities()));
 			} catch (JsonProcessingException e) {

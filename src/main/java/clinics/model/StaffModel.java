@@ -31,6 +31,8 @@ public class StaffModel extends PersonModel {
 	private Boolean fri;
 
 	private Boolean sat;
+	
+	private Integer user;
 
 	public List<IdValueModel> getQualifications() {
 		return qualifications;
@@ -124,5 +126,13 @@ public class StaffModel extends PersonModel {
 
 	public void setSat(Boolean sat) {
 		this.sat = sat;
+	}
+
+	public Integer getUser() {
+		return user;
+	}
+
+	public void setUser(Integer user) {
+		this.user = user;
 	}
 }
