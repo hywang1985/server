@@ -13,8 +13,8 @@ import clinics.model.AppointmentModel;
 @Component
 public class AppointmentTransformer extends AbstractDTOTransformer<AppointmentModel, Appointment> {
 
-	private static final String[] FROM_EXCLUDES = new String[] { "department", "doctor", "patient" };
-	private static final String[] TO_EXCLUDES = new String[] { "department", "doctor", "patient" };
+	private static final String[] FROM_EXCLUDES = new String[] { "department", "doctor", "patient", "done" };
+	private static final String[] TO_EXCLUDES = new String[] { "department", "doctor", "patient", "done" };
 
 	@Autowired
 	private PatientRepositoryService patientRepositoryService;
@@ -43,7 +43,9 @@ public class AppointmentTransformer extends AbstractDTOTransformer<AppointmentMo
 					dest.setDepartment(departmentRepositoryService.findOne(source.getDepartment()));
 				}
 				if(null == source.getId()) {
-					source.setDone(false);
+					dest.setDone(false);
+				} else {
+					dest.setDone(source.getDone() == null ? false : source.getDone());
 				}
 			} catch (Exception e) {
 				dest = null;
@@ -68,6 +70,7 @@ public class AppointmentTransformer extends AbstractDTOTransformer<AppointmentMo
 				if (null != source.getDepartment()) {
 					dest.setDepartment(source.getDepartment().getId());
 				}
+				dest.setDone(source.getDone() == null ? false : source.getDone());
 			} catch (Exception e) {
 				dest = null;
 			}

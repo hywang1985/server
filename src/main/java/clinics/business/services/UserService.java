@@ -57,7 +57,9 @@ public class UserService extends AbstractServiceImpl<Integer, UserModel, User, U
 		if(SUPER_USERS.contains(name)) {
 			user.setAuthorities(transformer().transformAdminAuthorities(ALL_ROLES));
 		}
-		user.setStaff(dbUser.getStaff().getId());
+		if(null != dbUser.getStaff()) {
+			user.setStaff(dbUser.getStaff().getId());
+		}
 		return user;
 	}
 

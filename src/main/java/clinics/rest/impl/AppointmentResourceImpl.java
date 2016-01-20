@@ -80,4 +80,16 @@ public class AppointmentResourceImpl {
 		List<AppointmentModel> items = appointmentService.getStaffAppointments(staffId, sb.toString());
 		return new ResponseEntity<List<AppointmentModel>>(items, HttpStatus.OK);
 	}
+	
+	@RequestMapping(method = RequestMethod.POST, path = "/done")
+	@ResponseBody
+	public ResponseEntity<AppointmentModel> done(@RequestBody AppointmentModel model) {
+		HttpHeaders headers = new HttpHeaders();
+		HttpStatus responseStatus = HttpStatus.BAD_REQUEST;
+
+		model = appointmentService.done(model);
+		responseStatus = HttpStatus.OK;
+
+		return new ResponseEntity<AppointmentModel>(model, headers, responseStatus);
+	}
 }

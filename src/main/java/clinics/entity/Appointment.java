@@ -28,6 +28,7 @@ public class Appointment extends BaseEntity<Integer> {
 	private String name;
 	private Patient patient;
 	private String reason;
+	private Boolean done;
 
 	@Override
 	public boolean equals(Object obj) {
@@ -115,5 +116,13 @@ public class Appointment extends BaseEntity<Integer> {
 
 	public void setReason(String reason) {
 		this.reason = reason;
+	}
+
+	public void setDone(boolean done) {
+		this.done = done;
+	}
+	
+	public Boolean getDone() {
+		return done;
 	}
 }

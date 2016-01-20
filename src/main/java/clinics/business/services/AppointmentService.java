@@ -51,4 +51,16 @@ public class AppointmentService extends AbstractServiceImpl<Integer, Appointment
 		}
 		return new ArrayList<AppointmentModel>();
 	}
+
+	public AppointmentModel done(AppointmentModel model) {
+		if(null != model && null != model.getId()) {
+			Appointment fromDb = repoService().findOne(model.getId());
+			if(null != fromDb) {
+				fromDb.setDone(true);
+				repoService().save(fromDb);
+				model.setDone(true);
+			}
+		}
+		return model;
+	}
 }
