@@ -30,6 +30,8 @@ public class VisitModel extends Model {
 	private String visitDate;
 
 	private String dischargeDate;
+	
+	private Boolean emergency;
 
 	private Integer referredBy;
 
@@ -121,6 +123,14 @@ public class VisitModel extends Model {
 
 	public void setDischargeDate(String dischargeDate) {
 		this.dischargeDate = dischargeDate;
+	}
+
+	public Boolean getEmergency() {
+		return emergency;
+	}
+
+	public void setEmergency(Boolean emergency) {
+		this.emergency = emergency;
 	}
 
 	public Integer getReferredBy() {

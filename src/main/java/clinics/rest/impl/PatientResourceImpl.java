@@ -21,9 +21,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import clinics.business.services.ConfigurationService;
+import clinics.business.services.MedicationService;
 import clinics.business.services.PatientService;
 import clinics.business.services.VisitService;
 import clinics.entity.Patient;
+import clinics.model.MedicationModel;
 import clinics.model.PatientModel;
 import clinics.model.VisitModel;
 import clinics.security.YuownTokenAuthenticationService;
@@ -38,6 +40,9 @@ public class PatientResourceImpl {
 	
 	@Autowired
 	private VisitService visitService;
+	
+	@Autowired
+	private MedicationService medicationService;
 
 	@Autowired
 	private ConfigurationService configurationService;
@@ -133,5 +138,38 @@ public class PatientResourceImpl {
 			responseStatus = HttpStatus.OK;
 		}
 		return new ResponseEntity<VisitModel>(model, headers, responseStatus);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/{patientId}/visits/{visitId}/medications")
+	public ResponseEntity<List<MedicationModel>> getPatientMedications(@PathVariable("patientId") int patientId, @PathVariable("visitId") int visitId) {
+		PatientModel patient = patientService.getById(patientId);
+		VisitModel visit = visitService.getById(visitId);
+		HttpHeaders headers = new HttpHeaders();
+		List<MedicationModel> medications = null;
+		if (null != patient && null != visit) {
+			medications = medicationService.getPatientVisitMedications(patient.getId(), visit.getId());
+		} else {
+			headers.add("errorMessage", "Patient ID or Visit ID Invalid");
+		}
+		return new ResponseEntity<List<MedicationModel>>(medications, headers, HttpStatus.OK);
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/{patientId}/visits/{visitId}/medications", consumes = {MediaType.APPLICATION_JSON_VALUE })
+	@ResponseBody
+	public ResponseEntity<MedicationModel> saveMedication(@PathVariable("patientId") int patientId, @PathVariable("visitId") int visitId, @RequestBody MedicationModel model, @Context HttpServletRequest httpRequest) {
+		model.setCreatedBy(yuownTokenAuthenticationService.getUser(httpRequest));
+
+		HttpHeaders headers = new HttpHeaders();
+		HttpStatus responseStatus = HttpStatus.BAD_REQUEST;
+
+		PatientModel patient = patientService.getById(patientId);
+		VisitModel visit = visitService.getById(visitId);
+		if (null != patient && null != visit) {
+			model.setPatient(patient.getId());
+			model.setVisit(visit.getId());
+			medicationService.save(model);
+			responseStatus = HttpStatus.OK;
+		}
+		return new ResponseEntity<MedicationModel>(model, headers, responseStatus);
 	}
 }

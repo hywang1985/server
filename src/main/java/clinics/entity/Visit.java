@@ -35,6 +35,7 @@ import clinics.enums.VisitType;
         @AttributeOverride(name = "type", column = @Column(name = "visit_type")),
         @AttributeOverride(name = "visitDate", column = @Column(name = "visit_date")),
         @AttributeOverride(name = "dischargeDate", column = @Column(name = "discharge_date")),
+        @AttributeOverride(name = "emergency", column = @Column(name = "emergency")),
         @AttributeOverride(name = "referredBy", column = @Column(name = "referred_by")),
         @AttributeOverride(name = "createdDate", column = @Column(name = "create_date")),
         @AttributeOverride(name = "modifiedDate", column = @Column(name = "update_date")),
@@ -66,6 +67,8 @@ public class Visit extends BaseEntity<Integer> implements Serializable {
 	private String visitDate;
 
 	private String dischargeDate;
+	
+	private Boolean emergency;
 
 	private Integer referredBy;
 
@@ -214,6 +217,14 @@ public class Visit extends BaseEntity<Integer> implements Serializable {
 
 	public void setModifiedBy(int modifiedBy) {
 		this.modifiedBy = modifiedBy;
+	}
+
+	public Boolean getEmergency() {
+		return emergency;
+	}
+
+	public void setEmergency(Boolean emergency) {
+		this.emergency = emergency;
 	}
 
 	@Override
