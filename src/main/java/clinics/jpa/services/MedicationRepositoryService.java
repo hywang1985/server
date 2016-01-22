@@ -24,4 +24,8 @@ public class MedicationRepositoryService extends AbstractRepositoryService<Medic
 	public List<Medication> getPatientVisitMedications(Patient patient, Visit visit) {
 		return repository().findAllByPatientAndVisit(patient, visit);
 	}
+
+	public Medication findById(Integer id) {
+		return repository().findById(id);
+	}
 }

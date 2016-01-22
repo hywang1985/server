@@ -17,7 +17,7 @@ import clinics.enums.MedicationRule;
 import clinics.enums.QuantityType;
 
 @Entity
-@Table(name = "appointment", uniqueConstraints = @UniqueConstraint(columnNames = { "id" }))
+@Table(name = "medications", uniqueConstraints = @UniqueConstraint(columnNames = { "id" }))
 @AttributeOverrides(value = {
 		@AttributeOverride(name = "id", column = @Column(name = "ID", insertable = false, updatable = false)),
 		@AttributeOverride(name = "name", column = @Column(name = "name")),

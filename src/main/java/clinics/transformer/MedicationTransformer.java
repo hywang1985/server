@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import clinics.entity.Medication;
+import clinics.jpa.services.MedicationRepositoryService;
 import clinics.jpa.services.PatientRepositoryService;
 import clinics.jpa.services.StaffRepositoryService;
 import clinics.jpa.services.VisitRepositoryService;
@@ -25,6 +26,9 @@ public class MedicationTransformer extends AbstractDTOTransformer<MedicationMode
 	@Autowired
 	private VisitRepositoryService visitRepositoryService;
 
+	@Autowired
+	private MedicationRepositoryService medicationRepositoryService;
+
 	@Override
 	public Medication transformFrom(MedicationModel source) {
 		Medication dest = null;
@@ -33,14 +37,21 @@ public class MedicationTransformer extends AbstractDTOTransformer<MedicationMode
 				dest = new Medication();
 				BeanUtils.copyProperties(source, dest, FROM_EXCLUDES);
 				dest.setName(dest.getName().toUpperCase());
-				if (null != source.getPatient()) {
-					dest.setPatient(patientRepositoryService.findOne(source.getPatient()));
-				}
-				if (null != source.getDoctor()) {
-					dest.setDoctor(staffRepositoryService.findOne(source.getDoctor()));
-				}
-				if (null != source.getVisit()) {
-					dest.setVisit(visitRepositoryService.findOne(source.getVisit()));
+				if (null == source.getId()) {
+					if (null != source.getPatient()) {
+						dest.setPatient(patientRepositoryService.findOne(source.getPatient()));
+					}
+					if (null != source.getDoctor()) {
+						dest.setDoctor(staffRepositoryService.findById(source.getDoctor()));
+					}
+					if (null != source.getVisit()) {
+						dest.setVisit(visitRepositoryService.findOne(source.getVisit()));
+					}
+				} else {
+					Medication fromDb = medicationRepositoryService.findById(source.getId());
+					dest.setPatient(fromDb.getPatient());
+					dest.setDoctor(fromDb.getDoctor());
+					dest.setVisit(fromDb.getVisit());
 				}
 			} catch (Exception e) {
 				dest = null;

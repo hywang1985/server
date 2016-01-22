@@ -27,6 +27,7 @@ import clinics.business.services.VisitService;
 import clinics.entity.Patient;
 import clinics.model.MedicationModel;
 import clinics.model.PatientModel;
+import clinics.model.UserModel;
 import clinics.model.VisitModel;
 import clinics.security.YuownTokenAuthenticationService;
 import clinics.utils.Constants;
@@ -157,7 +158,7 @@ public class PatientResourceImpl {
 	@RequestMapping(method = RequestMethod.POST, value = "/{patientId}/visits/{visitId}/medications", consumes = {MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
 	public ResponseEntity<MedicationModel> saveMedication(@PathVariable("patientId") int patientId, @PathVariable("visitId") int visitId, @RequestBody MedicationModel model, @Context HttpServletRequest httpRequest) {
-		model.setCreatedBy(yuownTokenAuthenticationService.getUser(httpRequest));
+		UserModel user = yuownTokenAuthenticationService.getUserObject(httpRequest);
 
 		HttpHeaders headers = new HttpHeaders();
 		HttpStatus responseStatus = HttpStatus.BAD_REQUEST;
@@ -167,7 +168,8 @@ public class PatientResourceImpl {
 		if (null != patient && null != visit) {
 			model.setPatient(patient.getId());
 			model.setVisit(visit.getId());
-			medicationService.save(model);
+			model.setDoctor(user.getStaff());
+			model = medicationService.save(model);
 			responseStatus = HttpStatus.OK;
 		}
 		return new ResponseEntity<MedicationModel>(model, headers, responseStatus);

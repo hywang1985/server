@@ -13,4 +13,6 @@ public interface MedicationRepository extends BaseRepository<Medication, Integer
 
 	List<Medication> findAllByPatientAndVisit(Patient patient, Visit visit);
 
+	Medication findById(Integer id);
+
 }

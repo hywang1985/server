@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import clinics.enums.Gender;
+import clinics.enums.MedicationRule;
 import clinics.enums.Prefix;
+import clinics.enums.QuantityType;
 import clinics.enums.VisitType;
 
 @RestController
@@ -38,13 +40,35 @@ public class MetaResourceImpl {
 		}
 		return asSet;
 	}
-	
+
 	@RequestMapping(value = "/visitTypes", method = RequestMethod.GET)
 	@ResponseBody
 	public Set<String> visitTypes() {
 		VisitType[] all = VisitType.values();
 		Set<String> asSet = new HashSet<String>();
 		for (VisitType each : all) {
+			asSet.add(each.toString());
+		}
+		return asSet;
+	}
+
+	@RequestMapping(value = "/medicationRules", method = RequestMethod.GET)
+	@ResponseBody
+	public Set<String> medicationRules() {
+		MedicationRule[] all = MedicationRule.values();
+		Set<String> asSet = new HashSet<String>();
+		for (MedicationRule each : all) {
+			asSet.add(each.toString());
+		}
+		return asSet;
+	}
+
+	@RequestMapping(value = "/quantityTypes", method = RequestMethod.GET)
+	@ResponseBody
+	public Set<String> quantityTypes() {
+		QuantityType[] all = QuantityType.values();
+		Set<String> asSet = new HashSet<String>();
+		for (QuantityType each : all) {
 			asSet.add(each.toString());
 		}
 		return asSet;
