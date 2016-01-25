@@ -31,4 +31,8 @@ public class EquipmentRepositoryService extends AbstractRepositoryService<Equipm
 	public List<Equipment> findByCommonItems(Boolean common) {
 		return repository().findByWorking(common);
 	}
+
+	public List<Equipment> findAllotableEquipments() {
+		return repository().findAllotableEquipments();
+	}
 }

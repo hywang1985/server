@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import clinics.entity.Appointment;
+import clinics.jpa.services.AppointmentRepositoryService;
 import clinics.jpa.services.DepartmentRepositoryService;
 import clinics.jpa.services.PatientRepositoryService;
 import clinics.jpa.services.StaffRepositoryService;
@@ -25,6 +26,9 @@ public class AppointmentTransformer extends AbstractDTOTransformer<AppointmentMo
 	@Autowired
 	private DepartmentRepositoryService departmentRepositoryService;
 
+	@Autowired
+	private AppointmentRepositoryService appoinmentRepositoryService;
+
 	@Override
 	public Appointment transformFrom(AppointmentModel source) {
 		Appointment dest = null;
@@ -33,19 +37,25 @@ public class AppointmentTransformer extends AbstractDTOTransformer<AppointmentMo
 				dest = new Appointment();
 				BeanUtils.copyProperties(source, dest, FROM_EXCLUDES);
 				dest.setName(dest.getName().toUpperCase());
-				if (null != source.getPatient()) {
-					dest.setPatient(patientRepositoryService.findOne(source.getPatient()));
-				}
-				if (null != source.getDoctor()) {
-					dest.setDoctor(staffRepositoryService.findOne(source.getDoctor()));
-				}
-				if (null != source.getDepartment()) {
-					dest.setDepartment(departmentRepositoryService.findOne(source.getDepartment()));
-				}
-				if(null == source.getId()) {
+				if (null == source.getId()) {
 					dest.setDone(false);
+					if (null != source.getPatient()) {
+						dest.setPatient(patientRepositoryService.findOne(source.getPatient()));
+					}
+					if (null != source.getDoctor()) {
+						dest.setDoctor(staffRepositoryService.findOne(source.getDoctor()));
+					}
+					if (null != source.getDepartment()) {
+						dest.setDepartment(departmentRepositoryService.findOne(source.getDepartment()));
+					}
 				} else {
 					dest.setDone(source.getDone() == null ? false : source.getDone());
+					Appointment fromDb = appoinmentRepositoryService.findOne(source.getId());
+					if(null != fromDb) {
+						dest.setPatient(fromDb.getPatient());
+						dest.setDoctor(fromDb.getDoctor());
+						dest.setDepartment(fromDb.getDepartment());
+					}
 				}
 			} catch (Exception e) {
 				dest = null;

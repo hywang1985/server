@@ -49,9 +49,11 @@ public class MedicationTransformer extends AbstractDTOTransformer<MedicationMode
 					}
 				} else {
 					Medication fromDb = medicationRepositoryService.findById(source.getId());
-					dest.setPatient(fromDb.getPatient());
-					dest.setDoctor(fromDb.getDoctor());
-					dest.setVisit(fromDb.getVisit());
+					if(null != fromDb) {
+						dest.setPatient(fromDb.getPatient());
+						dest.setDoctor(fromDb.getDoctor());
+						dest.setVisit(fromDb.getVisit());
+					}
 				}
 			} catch (Exception e) {
 				dest = null;

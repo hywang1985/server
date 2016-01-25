@@ -2,7 +2,6 @@ package clinics.entity;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -61,7 +60,7 @@ public class Medication extends BaseEntity<Integer> {
 		return true;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER, optional = false, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	public Staff getDoctor() {
 		return doctor;
 	}
@@ -77,7 +76,7 @@ public class Medication extends BaseEntity<Integer> {
 		return name;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER, optional = false, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	public Patient getPatient() {
 		return patient;
 	}
@@ -123,7 +122,7 @@ public class Medication extends BaseEntity<Integer> {
 		this.quantityType = quantityType;
 	}
 
-	@ManyToOne(fetch = FetchType.EAGER, optional = false, cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
 	public Visit getVisit() {
 		return visit;
 	}

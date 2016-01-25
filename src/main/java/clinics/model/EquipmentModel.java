@@ -15,6 +15,8 @@ public class EquipmentModel extends Model {
 
 	private Boolean common;
 
+	private Boolean allotable;
+
 	public String getName() {
 		return name;
 	}
@@ -45,5 +47,23 @@ public class EquipmentModel extends Model {
 
 	public void setCommon(Boolean common) {
 		this.common = common;
+	}
+
+	public Boolean getAllotable() {
+		return allotable;
+	}
+
+	public void setAllotable(Boolean allotable) {
+		this.allotable = allotable;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		return this.id == ((EquipmentModel) obj).id;
+	}
+
+	@Override
+	public int hashCode() {
+		return this.id;
 	}
 }

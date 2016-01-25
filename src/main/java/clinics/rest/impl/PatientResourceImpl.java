@@ -38,10 +38,10 @@ public class PatientResourceImpl {
 
 	@Autowired
 	private PatientService patientService;
-	
+
 	@Autowired
 	private VisitService visitService;
-	
+
 	@Autowired
 	private MedicationService medicationService;
 
@@ -92,8 +92,7 @@ public class PatientResourceImpl {
 
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseEntity<List<PatientModel>> getAll(@RequestParam(value = "name", required = false) String name,
-			@RequestParam(value = "page", required = false) Integer page,
+	public ResponseEntity<List<PatientModel>> getAll(@RequestParam(value = "name", required = false) String name, @RequestParam(value = "page", required = false) Integer page,
 			@RequestParam(value = "size", required = false) Integer size) {
 		HttpHeaders headers = new HttpHeaders();
 		Page<Patient> pagedItems = null;
@@ -110,7 +109,7 @@ public class PatientResourceImpl {
 
 		return new ResponseEntity<List<PatientModel>>(items, headers, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "/{id}/visits")
 	public ResponseEntity<List<VisitModel>> getPatientVisits(@PathVariable("id") int id) {
 		PatientModel patient = patientService.getById(id);
@@ -123,8 +122,8 @@ public class PatientResourceImpl {
 		}
 		return new ResponseEntity<List<VisitModel>>(visits, headers, HttpStatus.OK);
 	}
-	
-	@RequestMapping(method = RequestMethod.POST, value = "/{id}/visits", consumes = {MediaType.APPLICATION_JSON_VALUE })
+
+	@RequestMapping(method = RequestMethod.POST, value = "/{id}/visits", consumes = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
 	public ResponseEntity<VisitModel> saveVisit(@PathVariable("id") int id, @RequestBody VisitModel model, @Context HttpServletRequest httpRequest) {
 		model.setCreatedBy(yuownTokenAuthenticationService.getUser(httpRequest));
@@ -140,7 +139,7 @@ public class PatientResourceImpl {
 		}
 		return new ResponseEntity<VisitModel>(model, headers, responseStatus);
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "/{patientId}/visits/{visitId}/medications")
 	public ResponseEntity<List<MedicationModel>> getPatientMedications(@PathVariable("patientId") int patientId, @PathVariable("visitId") int visitId) {
 		PatientModel patient = patientService.getById(patientId);
@@ -154,10 +153,11 @@ public class PatientResourceImpl {
 		}
 		return new ResponseEntity<List<MedicationModel>>(medications, headers, HttpStatus.OK);
 	}
-	
-	@RequestMapping(method = RequestMethod.POST, value = "/{patientId}/visits/{visitId}/medications", consumes = {MediaType.APPLICATION_JSON_VALUE })
+
+	@RequestMapping(method = RequestMethod.POST, value = "/{patientId}/visits/{visitId}/medications", consumes = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
-	public ResponseEntity<MedicationModel> saveMedication(@PathVariable("patientId") int patientId, @PathVariable("visitId") int visitId, @RequestBody MedicationModel model, @Context HttpServletRequest httpRequest) {
+	public ResponseEntity<MedicationModel> saveMedication(@PathVariable("patientId") int patientId, @PathVariable("visitId") int visitId, @RequestBody MedicationModel model,
+			@Context HttpServletRequest httpRequest) {
 		UserModel user = yuownTokenAuthenticationService.getUserObject(httpRequest);
 
 		HttpHeaders headers = new HttpHeaders();
@@ -173,5 +173,19 @@ public class PatientResourceImpl {
 			responseStatus = HttpStatus.OK;
 		}
 		return new ResponseEntity<MedicationModel>(model, headers, responseStatus);
+	}
+
+	@RequestMapping(method = RequestMethod.DELETE, value = "/medications/{medicationId}")
+	@ResponseBody
+	public ResponseEntity<String> deleteMedication(@PathVariable("medicationId") int medicationId) {
+		HttpHeaders headers = new HttpHeaders();
+		HttpStatus responseStatus = HttpStatus.BAD_REQUEST;
+
+		MedicationModel medication = medicationService.getById(medicationId);
+		if (null != medication) {
+			medicationService.removeById(medicationId);
+			responseStatus = HttpStatus.OK;
+		}
+		return new ResponseEntity<String>(headers, responseStatus);
 	}
 }

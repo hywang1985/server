@@ -73,4 +73,9 @@ public class EquipmentResourceImpl {
 		}
 		return new ResponseEntity<List<EquipmentModel>>(items, HttpStatus.OK);
 	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/available")
+	public ResponseEntity<List<EquipmentModel>> availableEquipments() {
+		return new ResponseEntity<List<EquipmentModel>>(equipmentService.getAvailableEquipments(), HttpStatus.OK);
+	}
 }

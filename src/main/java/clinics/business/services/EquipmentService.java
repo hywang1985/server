@@ -57,4 +57,23 @@ public class EquipmentService extends AbstractServiceImpl<Integer, EquipmentMode
 		}
 		return equipments;
 	}
+
+	public List<EquipmentModel> getAvailableEquipments() {
+		List<EquipmentModel> all = getAll(true);
+		List<EquipmentModel> allotableEquipments = transformer().transformTo(repoService().findAllotableEquipments());
+		for (EquipmentModel equipmentModel : allotableEquipments) {
+			EquipmentModel fromList = getFromAll(all, equipmentModel.getId());
+			fromList.setAllotable(true);
+		}
+		return all;
+	}
+
+	private EquipmentModel getFromAll(List<EquipmentModel> all, Integer integer) {
+		for (EquipmentModel equipmentModel : all) {
+			if (equipmentModel.getId() == integer) {
+				return equipmentModel;
+			}
+		}
+		return null;
+	}
 }
