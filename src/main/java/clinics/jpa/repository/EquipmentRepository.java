@@ -1,6 +1,7 @@
 package clinics.jpa.repository;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -19,6 +20,6 @@ public interface EquipmentRepository extends BaseRepository<Equipment, Integer> 
 	public List<Equipment> findByCommon(Boolean common);
 
 	@Query("SELECT e from RoomEquipment re RIGHT JOIN re.id.equipment e WHERE e.working = true AND (re.id.equipment is null or e.common = true)")
-	public List<Equipment> findAllotableEquipments();
+	public Set<Equipment> findAllotableEquipments();
 
 }

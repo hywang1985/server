@@ -64,7 +64,8 @@ public class EquipmentResourceImpl {
 
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseEntity<List<EquipmentModel>> getAll(@RequestParam(value = "name", required = false) String name, @RequestParam(value = "working", required = false) Boolean working) {
+	public ResponseEntity<List<EquipmentModel>> getAll(@RequestParam(value = "name", required = false) String name,
+			@RequestParam(value = "working", required = false) Boolean working) {
 		List<EquipmentModel> items = null;
 		if (StringUtils.isNotBlank(name)) {
 			items = equipmentService.getByName(name);
@@ -73,7 +74,7 @@ public class EquipmentResourceImpl {
 		}
 		return new ResponseEntity<List<EquipmentModel>>(items, HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET, value = "/available")
 	public ResponseEntity<List<EquipmentModel>> availableEquipments() {
 		return new ResponseEntity<List<EquipmentModel>>(equipmentService.getAvailableEquipments(), HttpStatus.OK);

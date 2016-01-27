@@ -1,18 +1,22 @@
 package clinics.transformer;
 
+import java.util.List;
+import java.util.Set;
+
 import clinics.entity.BaseEntity;
 import clinics.model.Model;
 
-import java.util.List;
-
 public interface DTOTransformer<From extends Model, To extends BaseEntity<?>> {
 
-    public List<To> transformFrom(List<From> sources);
+	public Set<To> transformFrom(Set<From> sources);
 
-    public To transformFrom(From source);
+	public To transformFrom(From source);
 
-    public From transformTo(To source);
+	public From transformTo(To source);
 
-    public List<From> transformTo(List<To> sources);
+	public Set<From> transformTo(Set<To> sources);
 
+	public List<To> transformFrom(List<From> sources);
+
+	public List<From> transformTo(List<To> sources);
 }

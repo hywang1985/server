@@ -1,6 +1,7 @@
 package clinics.jpa.services;
 
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,7 @@ public class EquipmentRepositoryService extends AbstractRepositoryService<Equipm
 		return repository().findByWorking(common);
 	}
 
-	public List<Equipment> findAllotableEquipments() {
+	public Set<Equipment> findAllotableEquipments() {
 		return repository().findAllotableEquipments();
 	}
 }
