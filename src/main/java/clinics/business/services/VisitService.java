@@ -53,7 +53,7 @@ public class VisitService extends AbstractServiceImpl<Integer, VisitModel, Visit
 				toSave.setRoom(roomEntity);
 			}
 		}
-		repoService().save(toSave);
+		resource = transformer().transformTo(repoService().save(toSave));
 		return resource;
 	}
 

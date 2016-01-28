@@ -21,10 +21,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import clinics.business.services.ConfigurationService;
+import clinics.business.services.DiagnosticService;
 import clinics.business.services.MedicationService;
 import clinics.business.services.PatientService;
 import clinics.business.services.VisitService;
 import clinics.entity.Patient;
+import clinics.model.DiagnosticModel;
 import clinics.model.MedicationModel;
 import clinics.model.PatientModel;
 import clinics.model.UserModel;
@@ -47,6 +49,9 @@ public class PatientResourceImpl {
 
 	@Autowired
 	private ConfigurationService configurationService;
+
+	@Autowired
+	private DiagnosticService diagnosticService;
 
 	@Autowired
 	private YuownTokenAuthenticationService yuownTokenAuthenticationService;
@@ -92,7 +97,8 @@ public class PatientResourceImpl {
 
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseEntity<List<PatientModel>> getAll(@RequestParam(value = "name", required = false) String name, @RequestParam(value = "page", required = false) Integer page,
+	public ResponseEntity<List<PatientModel>> getAll(@RequestParam(value = "name", required = false) String name,
+			@RequestParam(value = "page", required = false) Integer page,
 			@RequestParam(value = "size", required = false) Integer size) {
 		HttpHeaders headers = new HttpHeaders();
 		Page<Patient> pagedItems = null;
@@ -100,7 +106,8 @@ public class PatientResourceImpl {
 		if (StringUtils.isNotBlank(name)) {
 			pagedItems = patientService.search(name, page, size);
 		} else {
-			pagedItems = patientService.getAllByPageNumber(page, size, configurationService.getIntPropertyFromCache(Constants.PAGE_SIZE));
+			pagedItems = patientService.getAllByPageNumber(page, size,
+					configurationService.getIntPropertyFromCache(Constants.PAGE_SIZE));
 		}
 		items = patientService.transformer().transformTo(pagedItems.getContent());
 
@@ -125,7 +132,8 @@ public class PatientResourceImpl {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/{id}/visits", consumes = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
-	public ResponseEntity<VisitModel> saveVisit(@PathVariable("id") int id, @RequestBody VisitModel model, @Context HttpServletRequest httpRequest) {
+	public ResponseEntity<VisitModel> saveVisit(@PathVariable("id") int id, @RequestBody VisitModel model,
+			@Context HttpServletRequest httpRequest) {
 		model.setCreatedBy(yuownTokenAuthenticationService.getUser(httpRequest));
 
 		HttpHeaders headers = new HttpHeaders();
@@ -134,7 +142,7 @@ public class PatientResourceImpl {
 		PatientModel patient = patientService.getById(id);
 		if (null != patient) {
 			model.setPatientId(patient.getId());
-			visitService.save(model);
+			model = visitService.save(model);
 			responseStatus = HttpStatus.OK;
 		}
 		return new ResponseEntity<VisitModel>(model, headers, responseStatus);
@@ -156,7 +164,8 @@ public class PatientResourceImpl {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/{patientId}/visits/{visitId}/medications", consumes = { MediaType.APPLICATION_JSON_VALUE })
 	@ResponseBody
-	public ResponseEntity<MedicationModel> saveMedication(@PathVariable("patientId") int patientId, @PathVariable("visitId") int visitId, @RequestBody MedicationModel model,
+	public ResponseEntity<MedicationModel> saveMedication(@PathVariable("patientId") int patientId,
+			@PathVariable("visitId") int visitId, @RequestBody MedicationModel model,
 			@Context HttpServletRequest httpRequest) {
 		UserModel user = yuownTokenAuthenticationService.getUserObject(httpRequest);
 
@@ -184,6 +193,56 @@ public class PatientResourceImpl {
 		MedicationModel medication = medicationService.getById(medicationId);
 		if (null != medication) {
 			medicationService.removeById(medicationId);
+			responseStatus = HttpStatus.OK;
+		}
+		return new ResponseEntity<String>(headers, responseStatus);
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/{patientId}/visits/{visitId}/diagnostics")
+	public ResponseEntity<List<DiagnosticModel>> getPatientDiagnostics(@PathVariable("patientId") int patientId, @PathVariable("visitId") int visitId) {
+		PatientModel patient = patientService.getById(patientId);
+		VisitModel visit = visitService.getById(visitId);
+		HttpHeaders headers = new HttpHeaders();
+		List<DiagnosticModel> diagnostics = null;
+		if (null != patient && null != visit) {
+			diagnostics = diagnosticService.getPatientVisitDiagnostics(patient.getId(), visit.getId());
+		} else {
+			headers.add("errorMessage", "Patient ID or Visit ID Invalid");
+		}
+		return new ResponseEntity<List<DiagnosticModel>>(diagnostics, headers, HttpStatus.OK);
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "/{patientId}/visits/{visitId}/diagnostics", consumes = { MediaType.APPLICATION_JSON_VALUE })
+	@ResponseBody
+	public ResponseEntity<DiagnosticModel> saveDiagnostic(@PathVariable("patientId") int patientId,
+			@PathVariable("visitId") int visitId, @RequestBody DiagnosticModel model,
+			@Context HttpServletRequest httpRequest) {
+		UserModel user = yuownTokenAuthenticationService.getUserObject(httpRequest);
+
+		HttpHeaders headers = new HttpHeaders();
+		HttpStatus responseStatus = HttpStatus.BAD_REQUEST;
+
+		PatientModel patient = patientService.getById(patientId);
+		VisitModel visit = visitService.getById(visitId);
+		if (null != patient && null != visit) {
+			model.setPatient(patient.getId());
+			model.setVisit(visit.getId());
+			model.setDoctor(user.getStaff());
+			model = diagnosticService.save(model);
+			responseStatus = HttpStatus.OK;
+		}
+		return new ResponseEntity<DiagnosticModel>(model, headers, responseStatus);
+	}
+
+	@RequestMapping(method = RequestMethod.DELETE, value = "/diagnostics/{diagnosticId}")
+	@ResponseBody
+	public ResponseEntity<String> deleteDiagnostic(@PathVariable("diagnosticId") int diagnosticId) {
+		HttpHeaders headers = new HttpHeaders();
+		HttpStatus responseStatus = HttpStatus.BAD_REQUEST;
+
+		DiagnosticModel diagnostic = diagnosticService.getById(diagnosticId);
+		if (null != diagnostic) {
+			diagnosticService.removeById(diagnosticId);
 			responseStatus = HttpStatus.OK;
 		}
 		return new ResponseEntity<String>(headers, responseStatus);

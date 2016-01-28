@@ -36,6 +36,14 @@ public class VisitModel extends Model {
 	private Integer referredBy;
 
 	private String reason;
+	
+	private String dischargeReason;
+	
+	private String condition;
+	
+	private String finalDiagnosis;
+	
+	private String dischargeInstructions;
 
 	public Integer getPatientId() {
 		return patientId;
@@ -147,5 +155,37 @@ public class VisitModel extends Model {
 
 	public void setReason(String reason) {
 		this.reason = reason;
+	}
+
+	public String getDischargeReason() {
+		return dischargeReason;
+	}
+
+	public void setDischargeReason(String dischargeReason) {
+		this.dischargeReason = dischargeReason;
+	}
+
+	public String getCondition() {
+		return condition;
+	}
+
+	public void setCondition(String condition) {
+		this.condition = condition;
+	}
+
+	public String getFinalDiagnosis() {
+		return finalDiagnosis;
+	}
+
+	public void setFinalDiagnosis(String finalDiagnosis) {
+		this.finalDiagnosis = finalDiagnosis;
+	}
+
+	public String getDischargeInstructions() {
+		return dischargeInstructions;
+	}
+
+	public void setDischargeInstructions(String dischargeInstructions) {
+		this.dischargeInstructions = dischargeInstructions;
 	}
 }

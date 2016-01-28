@@ -35,6 +35,10 @@ import clinics.enums.VisitType;
         @AttributeOverride(name = "type", column = @Column(name = "visit_type")),
         @AttributeOverride(name = "visitDate", column = @Column(name = "visit_date")),
         @AttributeOverride(name = "dischargeDate", column = @Column(name = "discharge_date")),
+        @AttributeOverride(name = "dischargeReason", column = @Column(name = "discharge_reason")),
+        @AttributeOverride(name = "condition", column = @Column(name = "discharge_condition")),
+        @AttributeOverride(name = "finalDiagnosis", column = @Column(name = "final_diagnosis")),
+        @AttributeOverride(name = "dischargeInstructions", column = @Column(name = "discharge_instructions")),
         @AttributeOverride(name = "emergency", column = @Column(name = "emergency")),
         @AttributeOverride(name = "referredBy", column = @Column(name = "referred_by")),
         @AttributeOverride(name = "createdDate", column = @Column(name = "create_date")),
@@ -73,6 +77,14 @@ public class Visit extends BaseEntity<Integer> implements Serializable {
 	private Integer referredBy;
 
 	private String reason;
+	
+	private String dischargeReason;
+	
+	private String condition;
+	
+	private String finalDiagnosis;
+	
+	private String dischargeInstructions;
 
 	private Date createdDate;
 
@@ -185,6 +197,38 @@ public class Visit extends BaseEntity<Integer> implements Serializable {
 
 	public void setReason(String reason) {
 		this.reason = reason;
+	}
+
+	public String getDischargeReason() {
+		return dischargeReason;
+	}
+
+	public void setDischargeReason(String dischargeReason) {
+		this.dischargeReason = dischargeReason;
+	}
+
+	public String getCondition() {
+		return condition;
+	}
+
+	public void setCondition(String condition) {
+		this.condition = condition;
+	}
+
+	public String getFinalDiagnosis() {
+		return finalDiagnosis;
+	}
+
+	public void setFinalDiagnosis(String finalDiagnosis) {
+		this.finalDiagnosis = finalDiagnosis;
+	}
+
+	public String getDischargeInstructions() {
+		return dischargeInstructions;
+	}
+
+	public void setDischargeInstructions(String dischargeInstructions) {
+		this.dischargeInstructions = dischargeInstructions;
 	}
 
 	public Date getCreatedDate() {
