@@ -30,6 +30,7 @@ public class Room extends BaseEntity<Integer> {
 	private String name;
 	private Integer occupancy;
 	private Set<RoomEquipment> roomEquipments;
+	private Double perHeadPrice;
 
 	public Room() {
 		roomEquipments = new HashSet<RoomEquipment>();
@@ -139,6 +140,14 @@ public class Room extends BaseEntity<Integer> {
 
 	public void setRoomEquipments(Set<RoomEquipment> roomEquipments) {
 		this.roomEquipments = roomEquipments;
+	}
+
+	public Double getPerHeadPrice() {
+		return perHeadPrice;
+	}
+
+	public void setPerHeadPrice(Double perHeadPrice) {
+		this.perHeadPrice = perHeadPrice;
 	}
 
 	public void updateEquipment(RoomEquipment roomEquip) {

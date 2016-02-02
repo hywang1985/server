@@ -15,6 +15,8 @@ public class StaffModel extends PersonModel {
 	private List<IdValueModel> specialities = new ArrayList<IdValueModel>();
 
 	private List<IdValueModel> departments = new ArrayList<IdValueModel>();
+	
+	private Double consultationFee;
 
 	private String doj;
 
@@ -62,6 +64,14 @@ public class StaffModel extends PersonModel {
 		if (departments != null && departments.size() > 0) {
 			this.departments.addAll(departments);
 		}
+	}
+
+	public Double getConsultationFee() {
+		return consultationFee;
+	}
+
+	public void setConsultationFee(Double consultationFee) {
+		this.consultationFee = consultationFee;
 	}
 
 	public String getDoj() {

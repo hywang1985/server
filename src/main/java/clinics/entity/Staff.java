@@ -74,6 +74,8 @@ public class Staff extends BaseEntity<Integer> implements Serializable {
 	private Prefix prefix;
 
 	private int bloodGroup;
+	
+	private Double consultationFee;
 
 	private Date createdDate;
 
@@ -323,6 +325,14 @@ public class Staff extends BaseEntity<Integer> implements Serializable {
 
 	public void setStaffQualifications(Set<StaffQualification> staffQualifications) {
 		this.staffQualifications = staffQualifications;
+	}
+
+	public Double getConsultationFee() {
+		return consultationFee;
+	}
+
+	public void setConsultationFee(Double consultationFee) {
+		this.consultationFee = consultationFee;
 	}
 
 	public Boolean getSun() {

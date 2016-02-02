@@ -21,6 +21,8 @@ public class RoomModel extends Model {
 	private Integer occupancy;
 	
 	private Integer available;
+	
+	private Double perHeadPrice;
 
 	public Boolean getAllotable() {
 		return allotable;
@@ -68,6 +70,14 @@ public class RoomModel extends Model {
 
 	public void setAvailable(Integer available) {
 		this.available = available;
+	}
+
+	public Double getPerHeadPrice() {
+		return perHeadPrice;
+	}
+
+	public void setPerHeadPrice(Double perHeadPrice) {
+		this.perHeadPrice = perHeadPrice;
 	}
 
 }
