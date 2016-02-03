@@ -20,12 +20,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import clinics.business.services.BillService;
 import clinics.business.services.ConfigurationService;
 import clinics.business.services.DiagnosticService;
 import clinics.business.services.MedicationService;
 import clinics.business.services.PatientService;
 import clinics.business.services.VisitService;
 import clinics.entity.Patient;
+import clinics.model.BillModel;
 import clinics.model.DiagnosticModel;
 import clinics.model.MedicationModel;
 import clinics.model.PatientModel;
@@ -52,6 +54,9 @@ public class PatientResourceImpl {
 
 	@Autowired
 	private DiagnosticService diagnosticService;
+	
+	@Autowired
+	private BillService billService;
 
 	@Autowired
 	private YuownTokenAuthenticationService yuownTokenAuthenticationService;
@@ -243,6 +248,53 @@ public class PatientResourceImpl {
 		DiagnosticModel diagnostic = diagnosticService.getById(diagnosticId);
 		if (null != diagnostic) {
 			diagnosticService.removeById(diagnosticId);
+			responseStatus = HttpStatus.OK;
+		}
+		return new ResponseEntity<String>(headers, responseStatus);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/{patientId}/visits/{visitId}/bills")
+	public ResponseEntity<List<BillModel>> getPatientBills(@PathVariable("patientId") int patientId, @PathVariable("visitId") int visitId) {
+		PatientModel patient = patientService.getById(patientId);
+		VisitModel visit = visitService.getById(visitId);
+		HttpHeaders headers = new HttpHeaders();
+		List<BillModel> bills = null;
+		if (null != patient && null != visit) {
+			bills = billService.getPatientVisitBills(patient.getId(), visit.getId());
+		} else {
+			headers.add("errorMessage", "Patient ID or Visit ID Invalid");
+		}
+		return new ResponseEntity<List<BillModel>>(bills, headers, HttpStatus.OK);
+	}
+
+	@RequestMapping(method = RequestMethod.POST, value = "/{patientId}/visits/{visitId}/bills", consumes = { MediaType.APPLICATION_JSON_VALUE })
+	@ResponseBody
+	public ResponseEntity<BillModel> saveBill(@PathVariable("patientId") int patientId,
+			@PathVariable("visitId") int visitId, @RequestBody BillModel model,
+			@Context HttpServletRequest httpRequest) {
+		HttpHeaders headers = new HttpHeaders();
+		HttpStatus responseStatus = HttpStatus.BAD_REQUEST;
+
+		PatientModel patient = patientService.getById(patientId);
+		VisitModel visit = visitService.getById(visitId);
+		if (null != patient && null != visit) {
+			model.setPatient(patient.getId());
+			model.setVisit(visit.getId());
+			model = billService.save(model);
+			responseStatus = HttpStatus.OK;
+		}
+		return new ResponseEntity<BillModel>(model, headers, responseStatus);
+	}
+
+	@RequestMapping(method = RequestMethod.DELETE, value = "/bills/{billId}")
+	@ResponseBody
+	public ResponseEntity<String> deleteBill(@PathVariable("billId") int billId) {
+		HttpHeaders headers = new HttpHeaders();
+		HttpStatus responseStatus = HttpStatus.BAD_REQUEST;
+
+		BillModel bill = billService.getById(billId);
+		if (null != bill) {
+			billService.removeById(billId);
 			responseStatus = HttpStatus.OK;
 		}
 		return new ResponseEntity<String>(headers, responseStatus);
