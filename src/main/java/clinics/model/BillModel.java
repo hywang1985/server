@@ -9,8 +9,8 @@ public class BillModel extends Model {
 
 	private String particulars;
 	private Double amount;
-	private Double discounted;
-	private Double afterDiscount;
+	private Boolean discounted;
+	private Double discount;
 	private Boolean deletable;
 	private Integer patient;
 	private Integer visit;
@@ -23,12 +23,12 @@ public class BillModel extends Model {
 		return amount;
 	}
 
-	public Double getDiscounted() {
+	public Boolean getDiscounted() {
 		return discounted;
 	}
 
-	public Double getAfterDiscount() {
-		return afterDiscount;
+	public Double getDiscount() {
+		return discount;
 	}
 
 	public Boolean getDeletable() {
@@ -51,12 +51,12 @@ public class BillModel extends Model {
 		this.amount = amount;
 	}
 
-	public void setDiscounted(Double discounted) {
+	public void setDiscounted(Boolean discounted) {
 		this.discounted = discounted;
 	}
 
-	public void setAfterDiscount(Double afterDiscount) {
-		this.afterDiscount = afterDiscount;
+	public void setDiscount(Double discount) {
+		this.discount = discount;
 	}
 
 	public void setDeletable(Boolean deletable) {

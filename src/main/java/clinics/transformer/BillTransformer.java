@@ -61,6 +61,9 @@ public class BillTransformer extends AbstractDTOTransformer<BillModel, Bill> {
 			try {
 				dest = new BillModel();
 				BeanUtils.copyProperties(source, dest, TO_EXCLUDES);
+				if (null == source.getDeletable()) {
+					dest.setDeletable(false);
+				}
 				if (null != source.getPatient()) {
 					dest.setPatient(source.getPatient().getId());
 				}

@@ -7,7 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -17,14 +17,14 @@ import javax.persistence.UniqueConstraint;
 		@AttributeOverride(name = "particulars", column = @Column(name = "particulars")),
 		@AttributeOverride(name = "amount", column = @Column(name = "amount")),
 		@AttributeOverride(name = "discounted", column = @Column(name = "discounted")),
-		@AttributeOverride(name = "afterDiscount", column = @Column(name = "after_discount")),
+		@AttributeOverride(name = "discount", column = @Column(name = "discount")),
 		@AttributeOverride(name = "deletable", column = @Column(name = "deletable"))
 })
 public class Bill extends BaseEntity<Integer> {
 	private String particulars;
 	private Double amount;
-	private Double discounted;
-	private Double afterDiscount;
+	private Boolean discounted;
+	private Double discount;
 	private Boolean deletable;
 	private Patient patient;
 	private Visit visit;
@@ -74,24 +74,24 @@ public class Bill extends BaseEntity<Integer> {
 		return amount;
 	}
 
-	public Double getDiscounted() {
+	public Boolean getDiscounted() {
 		return discounted;
 	}
 
-	public Double getAfterDiscount() {
-		return afterDiscount;
+	public Double getDiscount() {
+		return discount;
 	}
 
 	public Boolean getDeletable() {
 		return deletable;
 	}
 
-	@OneToOne(optional = false)
+	@ManyToOne(optional = false)
 	public Patient getPatient() {
 		return patient;
 	}
 
-	@OneToOne(optional = false)
+	@ManyToOne(optional = false)
 	public Visit getVisit() {
 		return visit;
 	}
@@ -104,12 +104,12 @@ public class Bill extends BaseEntity<Integer> {
 		this.amount = amount;
 	}
 
-	public void setDiscounted(Double discounted) {
+	public void setDiscounted(Boolean discounted) {
 		this.discounted = discounted;
 	}
 
-	public void setAfterDiscount(Double afterDiscount) {
-		this.afterDiscount = afterDiscount;
+	public void setDiscount(Double discount) {
+		this.discount = discount;
 	}
 
 	public void setDeletable(Boolean deletable) {
