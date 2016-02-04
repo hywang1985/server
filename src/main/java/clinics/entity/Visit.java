@@ -2,15 +2,19 @@ package clinics.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.AttributeOverride;
 import javax.persistence.AttributeOverrides;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -24,7 +28,6 @@ import clinics.enums.VisitType;
 @Table(name = "VISITS", uniqueConstraints = @UniqueConstraint(columnNames = { "id" }))
 @AttributeOverrides(value = {
         @AttributeOverride(name = "id", column = @Column(name = "id", insertable = false, updatable = false)),
-        @AttributeOverride(name = "patientId", column = @Column(name = "patient_id")),
         @AttributeOverride(name = "reason", column = @Column(name = "reason")),
         @AttributeOverride(name = "weight", column = @Column(name = "weight")),
         @AttributeOverride(name = "height", column = @Column(name = "height")),
@@ -49,8 +52,6 @@ import clinics.enums.VisitType;
 public class Visit extends BaseEntity<Integer> implements Serializable {
 
 	private static final long serialVersionUID = 4289151143888117381L;
-	
-	private Integer patientId;
 
 	private Double weight;
 
@@ -71,19 +72,19 @@ public class Visit extends BaseEntity<Integer> implements Serializable {
 	private String visitDate;
 
 	private String dischargeDate;
-	
+
 	private Boolean emergency;
 
 	private Integer referredBy;
 
 	private String reason;
-	
+
 	private String dischargeReason;
-	
+
 	private String condition;
-	
+
 	private String finalDiagnosis;
-	
+
 	private String dischargeInstructions;
 
 	private Date createdDate;
@@ -94,13 +95,13 @@ public class Visit extends BaseEntity<Integer> implements Serializable {
 
 	private int modifiedBy;
 
-	public Integer getPatientId() {
-		return patientId;
-	}
+	private Patient patient;
 
-	public void setPatientId(Integer patientId) {
-		this.patientId = patientId;
-	}
+	private List<Diagnostic> diagnostics;
+
+	private List<Medication> medications;
+
+	private List<Bill> bills;
 
 	public Double getWeight() {
 		return weight;
@@ -269,6 +270,42 @@ public class Visit extends BaseEntity<Integer> implements Serializable {
 
 	public void setEmergency(Boolean emergency) {
 		this.emergency = emergency;
+	}
+
+	@ManyToOne(fetch = FetchType.EAGER, optional = false)
+	public Patient getPatient() {
+		return patient;
+	}
+
+	public void setPatient(Patient patient) {
+		this.patient = patient;
+	}
+
+	@OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true, mappedBy = "visit")
+	public List<Diagnostic> getDiagnostics() {
+		return diagnostics;
+	}
+
+	public void setDiagnostics(List<Diagnostic> diagnostics) {
+		this.diagnostics = diagnostics;
+	}
+
+	@OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true, mappedBy = "visit")
+	public List<Medication> getMedications() {
+		return medications;
+	}
+
+	public void setMedications(List<Medication> medications) {
+		this.medications = medications;
+	}
+
+	@OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true, mappedBy = "visit")
+	public List<Bill> getBills() {
+		return bills;
+	}
+
+	public void setBills(List<Bill> bills) {
+		this.bills = bills;
 	}
 
 	@Override
