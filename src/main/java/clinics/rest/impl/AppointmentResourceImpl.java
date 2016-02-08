@@ -81,6 +81,13 @@ public class AppointmentResourceImpl {
 		return new ResponseEntity<List<AppointmentModel>>(items, HttpStatus.OK);
 	}
 	
+	@RequestMapping(method = RequestMethod.GET, path = "/patient/{patientId}")
+	@ResponseBody
+	public ResponseEntity<List<AppointmentModel>> getPatientAppointments(@PathVariable("patientId") Integer patientId) {
+		List<AppointmentModel> items = appointmentService.getPatientAppointments(patientId);
+		return new ResponseEntity<List<AppointmentModel>>(items, HttpStatus.OK);
+	}
+	
 	@RequestMapping(method = RequestMethod.POST, path = "/done")
 	@ResponseBody
 	public ResponseEntity<AppointmentModel> done(@RequestBody AppointmentModel model) {

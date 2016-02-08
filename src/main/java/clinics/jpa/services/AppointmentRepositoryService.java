@@ -6,11 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import clinics.entity.Appointment;
+import clinics.entity.Patient;
 import clinics.entity.Staff;
 import clinics.jpa.repository.AppointmentRepository;
 
 @Service
-public class AppointmentRepositoryService extends AbstractRepositoryService<AppointmentRepository, Appointment, Integer> {
+public class AppointmentRepositoryService
+		extends AbstractRepositoryService<AppointmentRepository, Appointment, Integer> {
 
 	@Autowired
 	private AppointmentRepository repository;
@@ -22,5 +24,9 @@ public class AppointmentRepositoryService extends AbstractRepositoryService<Appo
 
 	public List<Appointment> getStaffAppointments(Staff staff, String date) {
 		return repository().findAllByDoctorAndDateTimeContaining(staff, date);
+	}
+
+	public List<Appointment> getPatientAppointments(Patient patient) {
+		return repository().findAllByPatient(patient);
 	}
 }
