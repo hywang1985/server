@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import clinics.entity.Room;
 import clinics.entity.Visit;
-import clinics.jpa.services.RoomRepositoryService;
 import clinics.jpa.services.VisitRepositoryService;
 import clinics.model.VisitModel;
 import clinics.transformer.VisitTransformer;
@@ -26,9 +25,6 @@ public class VisitService extends AbstractServiceImpl<Integer, VisitModel, Visit
 		return visitRepositoryService;
 	}
 
-	@Autowired
-	private RoomRepositoryService roomRepositoryService;
-
 	@Override
 	public VisitTransformer transformer() {
 		return visitTransformer;
@@ -36,25 +32,7 @@ public class VisitService extends AbstractServiceImpl<Integer, VisitModel, Visit
 
 	@Override
 	public VisitModel save(VisitModel resource) {
-		Visit toSave = transformer().transformFrom(resource);
-		Visit fromDb = null;
-		Room existing = null;
-		if (null != toSave.getId()) {
-			fromDb = repoService().findOne(toSave.getId());
-			existing = fromDb.getRoom();
-		}
-
-		if (null != resource.getRoom()) {
-			Room roomEntity = roomRepositoryService.findOne(resource.getRoom());
-			if (null != roomEntity) {
-				if (null != existing) {
-					toSave.setRoom(null);
-				}
-				toSave.setRoom(roomEntity);
-			}
-		}
-		resource = transformer().transformTo(repoService().save(toSave));
-		return resource;
+		return super.save(resource);
 	}
 
 	public List<VisitModel> getAllVisitsOfPatient(Integer patientId) {
